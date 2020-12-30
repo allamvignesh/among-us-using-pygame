@@ -5,7 +5,7 @@ from walk_anim import Player
 pygame.init()
 
 clock = pygame.time.Clock()
-fps = 50
+fps = 60
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
 
