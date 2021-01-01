@@ -77,11 +77,12 @@ leaves = [pygame.image.load(f"models/tasks/Clean O2 Filter/o2_leafs/o2_leaf{i}.p
 #align engine
 enDon = 0
 enp = [132, 205]
+count = 1
 en1 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_base.png")
 en2 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_slider.png")
 en3 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine.png")
 en4 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine_green.png")
-en5 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_sliderShadow.png")
+en5 = pygame.image.load("models/tasks/Align Engine Output/green.png")
 
 while True:
 	screen.fill((0, 0, 0))
@@ -225,20 +226,20 @@ while True:
 			cllevDon = 1
 
 	if enDon == 0:
+		screen.blit(en5, (286, 54))
 		screen.blit(en1, (253, 22))
 		screen.blit(en4, (220, 170))
-		if pygame.mouse.get_pressed()[0]:
-			if enp[1] < 365:
+		if pygame.mouse.get_pressed()[0] and 106 < pygame.mouse.get_pos()[1] < 379 and 614 < pygame.mouse.get_pos()[0] < 687:
+			if enp[1]-20 < pygame.mouse.get_pos()[1] < enp[1]+20:
 				enp[1] = pygame.mouse.get_pos()[1]
+			if 240 < pygame.mouse.get_pos()[1] < 260:
+				count += 1
+				if count == 100:
+					enDon = 1
 			else:
-				enp[1] = 0
-			if enp[1] > 130:
-				enp[1] = pygame.mouse.get_pos()[1]
-			else:
-				enp[1] = 131
+				count = 0
 		screen.blit(en2, (611, enp[1]))
 		screen.blit(en3, (220, enp[1]-73))
-		#screen.blit(en5, pygame.mouse.get_pos())
 
 
 
