@@ -495,7 +495,6 @@ while True:
 	screen.blit(cam_off, (577+a, 1076+b))
 	screen.blit(cam_off, (1652+a, 878+b))
 
-
 	#collision
 	for i in range(len(collision)):
 		collision[i].rect.x, collision[i].rect.y = coll_loc[i][0]+a, coll_loc[i][1]+b
