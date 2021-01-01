@@ -66,7 +66,7 @@ up4 = pygame.transform.scale(up4, (10, 10))
 up5 = pygame.image.load("models/tasks/Upload Data/dataTransfer_uploadButton.png")
 
 #leaves
-cllevDon = 0
+cllevDon = 1
 tot = 0
 cllev1 = pygame.image.load("models/tasks/Clean O2 Filter/o2_bgBase.png")
 cllev2 = pygame.image.load("models/tasks/Clean O2 Filter/o2_bgTop.png")
@@ -74,9 +74,17 @@ cllev2 = pygame.image.load("models/tasks/Clean O2 Filter/o2_bgTop.png")
 levPos = [(random.randint(390, 649), random.randint(109, 400)) for i in range(7)]
 leaves = [pygame.image.load(f"models/tasks/Clean O2 Filter/o2_leafs/o2_leaf{i}.png") for i in range(1,8)]
 
+#align engine
+enDon = 0
+enp = [132, 205]
+en1 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_base.png")
+en2 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_slider.png")
+en3 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine.png")
+en4 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine_green.png")
+en5 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_sliderShadow.png")
 
 while True:
-	screen.fill((255, 255, 255))
+	screen.fill((0, 0, 0))
 
 	#swipecard
 	if swipeDon == 0:
@@ -215,6 +223,23 @@ while True:
 			screen.blit(cllev2, (263, 29))
 		if tot == 7:
 			cllevDon = 1
+
+	if enDon == 0:
+		screen.blit(en1, (253, 22))
+		screen.blit(en4, (220, 170))
+		if pygame.mouse.get_pressed()[0]:
+			if enp[1] < 365:
+				enp[1] = pygame.mouse.get_pos()[1]
+			else:
+				enp[1] = 0
+			if enp[1] > 130:
+				enp[1] = pygame.mouse.get_pos()[1]
+			else:
+				enp[1] = 131
+		screen.blit(en2, (611, enp[1]))
+		screen.blit(en3, (220, enp[1]-73))
+		#screen.blit(en5, pygame.mouse.get_pos())
+
 
 
 	for event in pygame.event.get():
