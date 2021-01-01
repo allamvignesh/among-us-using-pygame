@@ -229,7 +229,7 @@ while True:
 		screen.blit(en5, (286, 54))
 		screen.blit(en1, (253, 22))
 		screen.blit(en4, (220, 170))
-		if pygame.mouse.get_pressed()[0] and 106 < pygame.mouse.get_pos()[1] < 379 and 614 < pygame.mouse.get_pos()[0] < 687:
+		if pygame.mouse.get_pressed()[0] and 126 < pygame.mouse.get_pos()[1] < 379 and 614 < pygame.mouse.get_pos()[0] < 687:
 			if enp[1]-20 < pygame.mouse.get_pos()[1] < enp[1]+20:
 				enp[1] = pygame.mouse.get_pos()[1]
 			if 240 < pygame.mouse.get_pos()[1] < 260:
