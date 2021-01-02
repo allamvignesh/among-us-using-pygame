@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 import random
+import numpy
+import math
 
 pygame.init()
 
@@ -8,49 +10,6 @@ clock = pygame.time.Clock()
 fps = 50
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
-
-#swipe card
-spbg = pygame.image.load("models/tasks/Swipe Card/admin_BG.png")
-spbg1 = pygame.image.load("models/tasks/Swipe Card/admin_sliderTop.png")
-spbg2 = pygame.image.load("models/tasks/Swipe Card/admin_sliderBottom.png")
-spbg3 = pygame.image.load("models/tasks/Swipe Card/admin_Wallet.png")
-spbg4 = pygame.image.load("models/tasks/Swipe Card/admin_walletFront.png")
-spbg5 = pygame.image.load("models/tasks/Swipe Card/admin_Card.png")
-
-doing = 0
-swipeDon = 1
-
-#fixwiring
-fixWirDon = 1
-fw1 = pygame.image.load("models/tasks/Fix Wiring/electricity_wiresBaseBack.png")
-fw2 = pygame.image.load("models/tasks/Fix Wiring/electricity_wires1.png")
-fw3 = pygame.image.load("models/tasks/Fix Wiring/electricity_wires1.png")
-
-red, green, blue, yellow = 0, 0, 0, 0
-
-#empty garbage
-EGDon = 1
-eg1 = pygame.image.load("models/tasks/Empty Garbage/garbage_Base.png")
-eg2 = pygame.image.load("models/tasks/Empty Garbage/garbage_lightShadow.png")
-eg3 = pygame.image.load("models/tasks/Empty Garbage/button.png")
-eg4 = pygame.image.load("models/tasks/Empty Garbage/garbage_leverBars.png")
-eg5 = pygame.image.load("models/tasks/Empty Garbage/garbage_leverHandle.png")
-
-gar1 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/diamond.png")
-gar2 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_1.png")
-gar3 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_2.png")
-gar4 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_3.png")
-gar5 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_4.png")
-gar6 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_5.png")
-gar7 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/garbage_6.png")
-gar8 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/teleporter.png")
-gar9 = pygame.image.load("models/tasks/Empty Garbage/Nova pasta/totem.png")
-
-garPos = []
-garba = [gar1, gar2, gar3, gar4, gar5, gar6, gar7, gar8, gar9]
-
-for i in range(1,20):
-			garPos.append([garba[random.randint(0,8)], [random.randint(261, 539), random.randint(270, 469)]])
 
 #upload
 uplDon = 301
@@ -75,7 +34,7 @@ levPos = [(random.randint(390, 649), random.randint(109, 400)) for i in range(7)
 leaves = [pygame.image.load(f"models/tasks/Clean O2 Filter/o2_leafs/o2_leaf{i}.png") for i in range(1,8)]
 
 #align engine
-enDon = 0
+enDon = 1
 enp = [132, 205]
 count = 1
 en1 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_base.png")
@@ -84,104 +43,90 @@ en3 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine.png
 en4 = pygame.image.load("models/tasks/Align Engine Output/engineAlign_engine_green.png")
 en5 = pygame.image.load("models/tasks/Align Engine Output/green.png")
 
+#calibrate
+calDon = 1
+cal1 = pygame.image.load("models/tasks/Calibrate Distributor/CalibratorBaseWWires.png")
+cal2 = pygame.image.load("models/tasks/Calibrate Distributor/calibratorButton.png")
+cal3 = pygame.image.load("models/tasks/Calibrate Distributor/calibratorGauge.png")
+cal4 = pygame.image.load("models/tasks/Calibrate Distributor/calibratorSpin1.png")
+w, h = cal4.get_size()
+angles = [random.randint(0, 360) for i in range(3)]
+angle1, angle2, angle3 = [random.randint(0, 132) for i in range(3)]
+calDoing = [0, 0, 0]
+cal5 = pygame.image.load("models/tasks/Calibrate Distributor/calibratorSpin2.png")
+cal6 = pygame.image.load("models/tasks/Calibrate Distributor/calibratorSpin3.png")
+
+#chart Course
+ccDon = 1
+cc1 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_base.png")
+cc2 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_checkPt.png")
+cc3 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_checkPtShadow.png")
+cc4 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_end.png")
+cc5 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_endShadow.png")
+cc6 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_ship.png")
+cc7 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_start.png")
+cc8 = pygame.image.load("models/tasks/Chart Course/nav_chartCourse_startShadow.png")
+angle = 0
+ccpos = [344, 430, 507, 597, 673]
+ccPos = [(i, random.randint(178, 353)) for i in ccpos]
+ship = [0, 0, 0, 0, 0]
+
+def blitRotate(surf, image, pos, originPos, angle):
+
+    # calcaulate the axis aligned bounding box of the rotated image
+    w, h       = image.get_size()
+    box        = [pygame.math.Vector2(p) for p in [(0, 0), (w, 0), (w, -h), (0, -h)]]
+    box_rotate = [p.rotate(angle) for p in box]
+    min_box    = (min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
+    max_box    = (max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
+
+    # calculate the translation of the pivot 
+    pivot        = pygame.math.Vector2(originPos[0], -originPos[1])
+    pivot_rotate = pivot.rotate(angle)
+    pivot_move   = pivot_rotate - pivot
+
+    # calculate the upper left origin of the rotated image
+    origin = (pos[0] - originPos[0] + min_box[0] - pivot_move[0], pos[1] - originPos[1] - max_box[1] + pivot_move[1])
+
+    # get a rotated image
+    rotated_image = pygame.transform.rotate(image, angle)
+
+    # rotate and blit the image
+    surf.blit(rotated_image, origin)
+  
+    # draw rectangle around the image
+    #pygame.draw.rect(surf, (255, 0, 0), (*origin, *rotated_image.get_size()),2)
+
+def draw_dashed_line(surf, color, start_pos, end_pos, width=5, dash_length=10):
+	x1, y1 = start_pos
+	x2, y2 = end_pos
+	dl = dash_length
+
+	if (x1 == x2):
+		ycoords = [y for y in range(y1, y2, dl if y1 < y2 else -dl)]
+		xcoords = [x1] * len(ycoords)
+	elif (y1 == y2):
+		xcoords = [x for x in range(x1, x2, dl if x1 < x2 else -dl)]
+		ycoords = [y1] * len(xcoords)
+	else:
+		a = abs(x2 - x1)
+		b = abs(y2 - y1)
+		c = round(math.sqrt(a**2 + b**2))
+		dx = dl * a / c
+		dy = dl * b / c
+
+		xcoords = [x for x in numpy.arange(x1, x2, dx if x1 < x2 else -dx)]
+		ycoords = [y for y in numpy.arange(y1, y2, dy if y1 < y2 else -dy)]
+
+	next_coords = list(zip(xcoords[1::2], ycoords[1::2]))
+	last_coords = list(zip(xcoords[0::2], ycoords[0::2]))
+	for (x1, y1), (x2, y2) in zip(next_coords, last_coords):
+		start = (round(x1), round(y1))
+		end = (round(x2), round(y2))
+		pygame.draw.line(surf, color, start, end, width)
+
 while True:
 	screen.fill((0, 0, 0))
-
-	#swipecard
-	if swipeDon == 0:
-		screen.blit(spbg, (259, 32))
-		screen.blit(spbg2, (259, 169))
-		screen.blit(spbg3, (268, 363))
-		
-		#(201, 150), (633, 150)
-		#screen.blit(spbg5, pygame.mouse.get_pos())
-		if 286 < pygame.mouse.get_pos()[0] < 507 and pygame.mouse.get_pressed()[0]:
-			doing = 1
-		
-		if doing == 1:
-			if pygame.mouse.get_pressed()[0]:
-				if 201 < pygame.mouse.get_pos()[0] < 700 and 150 < pygame.mouse.get_pos()[1] < 250:
-					screen.blit(spbg5, (pygame.mouse.get_pos()[0], 150))
-					if 600 < pygame.mouse.get_pos()[0] < 680:
-						swipeDon = 1
-			else:
-				screen.blit(spbg5, (201, 150))
-		else:
-			screen.blit(spbg5, (285, 376))
-
-		screen.blit(spbg1, (259, 32))
-		screen.blit(spbg4, (279, 446))
-
-	if fixWirDon == 0:
-		screen.blit(fw1, (264, 28))
-		if 269 < pygame.mouse.get_pos()[0] < 300 and 130 < pygame.mouse.get_pos()[1] < 200 and pygame.mouse.get_pressed()[0] and red != 2:
-			red = 1
-		elif 269 < pygame.mouse.get_pos()[0] < 300 and 230 < pygame.mouse.get_pos()[1] < 300 and pygame.mouse.get_pressed()[0] and green != 2:
-			green = 1
-		elif 269 < pygame.mouse.get_pos()[0] < 300 and 335 < pygame.mouse.get_pos()[1] < 400 and pygame.mouse.get_pressed()[0] and blue != 2:
-			blue = 1
-		elif 269 < pygame.mouse.get_pos()[0] < 300 and 440 < pygame.mouse.get_pos()[1] < 500 and pygame.mouse.get_pressed()[0] and yellow != 2:
-			yellow = 1
-
-		if red == 1:
-			pygame.draw.line(screen, (255, 0, 0), (269, 130), pygame.mouse.get_pos(), 20)
-			#(735, 129)
-			if 735 < pygame.mouse.get_pos()[0] < 800 and 130 < pygame.mouse.get_pos()[1] < 200 and pygame.mouse.get_pressed()[0]:
-				red = 2
-				redpos = pygame.mouse.get_pos()
-			screen.blit(fw2, (pygame.mouse.get_pos()[0]-5, pygame.mouse.get_pos()[1]-10))
-		elif green == 1:
-			pygame.draw.line(screen, (0, 255, 0), (269, 230), pygame.mouse.get_pos(), 20)
-			if 735 < pygame.mouse.get_pos()[0] < 800 and 230 < pygame.mouse.get_pos()[1] < 300 and pygame.mouse.get_pressed()[0]:
-				green = 2
-				greenpos = pygame.mouse.get_pos()
-			screen.blit(fw2, (pygame.mouse.get_pos()[0]-5, pygame.mouse.get_pos()[1]-10))
-		elif blue == 1:
-			pygame.draw.line(screen, (0, 0, 255), (269, 335), pygame.mouse.get_pos(), 20)
-			if 735 < pygame.mouse.get_pos()[0] < 800 and 335 < pygame.mouse.get_pos()[1] < 400 and pygame.mouse.get_pressed()[0]:
-				blue = 2
-				bluepos = pygame.mouse.get_pos()
-			screen.blit(fw2, (pygame.mouse.get_pos()[0]-5, pygame.mouse.get_pos()[1]-10))
-		elif yellow == 1:
-			pygame.draw.line(screen, (255, 255, 0), (269, 440), pygame.mouse.get_pos(), 20)
-			if 735 < pygame.mouse.get_pos()[0] < 800 and 440 < pygame.mouse.get_pos()[1] < 500 and pygame.mouse.get_pressed()[0]:
-				yellow = 2
-				yellowpos = pygame.mouse.get_pos()
-			screen.blit(fw2, (pygame.mouse.get_pos()[0]-5, pygame.mouse.get_pos()[1]-10))
-
-		if red == 2:
-			pygame.draw.line(screen, (255, 0, 0), (269, 130), redpos, 20)
-			screen.blit(fw2, (redpos[0]-10, redpos[1]-10))
-		if green == 2:
-			pygame.draw.line(screen, (0, 255, 0), (269, 230), greenpos, 20)
-			screen.blit(fw2, (greenpos[0]-10, greenpos[1]-10))
-		if blue == 2:
-			pygame.draw.line(screen, (0, 0, 255), (269, 335), bluepos, 20)
-			screen.blit(fw2, (bluepos[0]-10, bluepos[1]-10))
-		if yellow == 2:
-			pygame.draw.line(screen, (255, 255, 0), (269, 440), yellowpos, 20)
-			screen.blit(fw2, (yellowpos[0]-10, yellowpos[1]-10))
-
-		if red == green == blue == yellow == 2:
-			fixWirDon = 1
-
-	if EGDon == 0:
-		screen.blit(eg1, (256, 28))
-		screen.blit(eg2, (259, 32))
-		if 652 < pygame.mouse.get_pos()[0] < 717 and 63 < pygame.mouse.get_pos()[1] < 168 and pygame.mouse.get_pressed()[0]:
-			screen.blit(eg3, (651, 68))
-			tot = 0
-			for i in range(len(garPos)):
-				garPos[i][1][1] += 5
-				tot += garPos[i][1][1]
-			if tot > 550 * len(garPos):
-				EGDon = 1
-
-		else:
-			screen.blit(eg3, (651, 60))
-
-		for i in garPos:
-			screen.blit(i[0], i[1])
 
 	if uplDon <= 300:
 		screen.blit(up1, (256, 90))
@@ -240,6 +185,124 @@ while True:
 				count = 0
 		screen.blit(en2, (611, enp[1]))
 		screen.blit(en3, (220, enp[1]-73))
+
+	if calDon == 0:
+		screen.blit(cal1, (258, 24))
+		screen.blit(cal2, (609, 124))
+		screen.blit(cal2, (609, 271))
+		screen.blit(cal2, (609, 421))
+		screen.blit(cal3, (597, 385))
+		screen.blit(cal3, (597, 231))
+		screen.blit(cal3, (597, 82))
+
+		if calDoing[0] == 0:
+			angle1 += 1
+			if angle1 > 132:
+				angle1 = 0
+		yellow = pygame.surface.Surface([angle1, 32])
+		yellow.fill((255, 255, 0))
+		screen.blit(yellow, (597, 82))
+		if calDoing[1] == 0:
+			angle2 += 1
+			if angle2 > 132:
+				angle2 = 0
+		blue = pygame.surface.Surface([angle2, 32])
+		blue.fill((0, 102, 204))
+		screen.blit(blue, (597, 231))
+		if calDoing[2] == 0:
+			angle3 += 1
+			if angle3 > 132:
+				angle3 = 0
+		cyan = pygame.surface.Surface([angle3, 32])
+		cyan.fill((102, 255, 255))
+		screen.blit(cyan, (597, 385))
+		angles = [i+1 if i !=360 else 0 for i in angles]
+		if calDoing[0] == 0:
+			blitRotate(screen, cal4, (369, 123), (w/2, h/2), angles[0])
+		else:
+			blitRotate(screen, cal4, (369, 123), (w/2, h/2), 0)
+		if calDoing[1] == 0:
+			blitRotate(screen, cal5, (369, 276), (w/2, h/2), angles[1])
+		else:
+			blitRotate(screen, cal5, (369, 276), (w/2, h/2), 0)
+		if calDoing[2] == 0:
+			blitRotate(screen, cal6, (369, 422), (w/2, h/2), angles[2])
+		else:
+			blitRotate(screen, cal6, (369, 422), (w/2, h/2), 0)
+
+		if 612 < pygame.mouse.get_pos()[0] < 716 and 128 < pygame.mouse.get_pos()[1] < 152 and calDoing[0] == 0:
+			if pygame.mouse.get_pressed()[0]:
+				screen.blit(cal2, (609, 130))
+				#print(angles[0]/360)
+				if 0.1 < angles[0]/360 < 0.9:
+					angles = [random.randint(0, 360) for i in range(3)]
+					calDoing = [0 for i in range(3)]
+				else:
+					if calDoing[1] == calDoing[2] == 0:
+						calDoing[0] = 1
+			else:
+				screen.blit(cal2, (609, 124))
+
+		elif 612 < pygame.mouse.get_pos()[0] < 716 and 276 < pygame.mouse.get_pos()[1] < 300 and calDoing[1] == 0:
+			if pygame.mouse.get_pressed()[0]:
+				screen.blit(cal2, (609, 278))
+				if 0.1 < angles[1]/360 < 0.9:
+					angles = [random.randint(0, 360) for i in range(3)]
+					calDoing = [0 for i in range(3)]
+				else:
+					if calDoing[0] == 1 and calDoing[2] == 0:
+						calDoing[1] = 1
+			else:
+				screen.blit(cal2, (609, 271))
+
+		elif 612 < pygame.mouse.get_pos()[0] < 716 and 427 < pygame.mouse.get_pos()[1] < 450 and calDoing[2] == 0:
+			if pygame.mouse.get_pressed()[0]:
+				screen.blit(cal2, (609, 427))
+				if 0.1 < angles[2]/360 < 0.9:
+					angles = [random.randint(0, 360) for i in range(3)]
+					calDoing = [0 for i in range(3)]
+				else:
+					if calDoing[0] == calDoing[1] == 1:
+						calDoing[2] = 1
+			else:
+				screen.blit(cal2, (609, 421))
+		if calDoing[0] == calDoing[1] == calDoing[2] == 1:
+			calDon = 1
+
+	if ccDon == 0:
+		angle += 1
+		screen.blit(cc1, (253, 118))
+		for i in ccPos[1:]:
+			screen.blit(cc2, (i[0]-cc2.get_size()[0]//2, i[1]-cc2.get_size()[1]//2))
+			screen.blit(cc8, (i[0]-cc7.get_size()[0]//2, i[1]-cc7.get_size()[1]//2))
+		screen.blit(cc7, (ccPos[0][0]-cc7.get_size()[0]//2, ccPos[0][1]-cc7.get_size()[1]//2))
+		blitRotate(screen , cc4, ccPos[-1], (cc4.get_size()[0]//2, cc4.get_size()[1]//2), angle)
+		for i in range(len(ccPos)-1):
+			draw_dashed_line(screen, (0, 0, 0), ccPos[i], ccPos[i+1])
+
+		if ship[0] == 0:
+			screen.blit(cc6, (ccPos[0][0]-17, ccPos[0][1]-22))
+			if ccPos[0][0]-20 < pygame.mouse.get_pos()[0] < ccPos[0][0]+20 and ccPos[0][1]-20 < pygame.mouse.get_pos()[1] < ccPos[0][1]+20:
+				if pygame.mouse.get_pressed()[0]:
+					ship[0] = 1
+		elif ship[1] == 0:
+			screen.blit(cc6, (ccPos[1][0]-17, ccPos[1][1]-22))
+			if ccPos[1][0]-20 < pygame.mouse.get_pos()[0] < ccPos[1][0]+20 and ccPos[1][1]-20 < pygame.mouse.get_pos()[1] < ccPos[1][1]+20:
+				if pygame.mouse.get_pressed()[0]:
+					ship[1] = 1
+		elif ship[2] == 0:
+			screen.blit(cc6, (ccPos[2][0]-17, ccPos[2][1]-22))
+			if ccPos[2][0]-20 < pygame.mouse.get_pos()[0] < ccPos[2][0]+20 and ccPos[2][1]-20 < pygame.mouse.get_pos()[1] < ccPos[2][1]+20:
+				if pygame.mouse.get_pressed()[0]:
+					ship[2] = 1
+		elif ship[3] == 0:
+			screen.blit(cc6, (ccPos[3][0]-17, ccPos[3][1]-22))
+			if ccPos[3][0]-20 < pygame.mouse.get_pos()[0] < ccPos[3][0]+20 and ccPos[3][1]-20 < pygame.mouse.get_pos()[1] < ccPos[3][1]+20:
+				if pygame.mouse.get_pressed()[0]:
+					ship[3] = 1
+		else:
+			ccDon = 1
+
 
 
 
