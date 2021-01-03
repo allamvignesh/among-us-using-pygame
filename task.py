@@ -108,13 +108,54 @@ fcDon = 1
 fc1 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_gasCanBase.png")
 
 #inspect sample
-isDon = 0
+isDon = 1
 is1 = pygame.image.load("models/tasks/Inspect Sample/medBay_back.png")
 is2 = pygame.image.load("models/tasks/Inspect Sample/medBay_panelCenter.png")
 is3 = pygame.image.load("models/tasks/Inspect Sample/medBay_glassBack.png")
 is4 = pygame.image.load("models/tasks/Inspect Sample/medBay_glassFrontTestTubes.png")
 is5 = pygame.image.load("models/tasks/Inspect Sample/medBay_dispenser.png")
+is6 = pygame.image.load("models/tasks/Inspect Sample/medBay_liquid_filled.png")
+is7 = pygame.image.load("models/tasks/Inspect Sample/medBay_panelBottom.png")
+is8 = pygame.image.load("models/tasks/Inspect Sample/medBay_buttonConfirm.png")
+is9 = pygame.image.load("models/tasks/Inspect Sample/medBay_liquid_anom.png")
+is10 = pygame.image.load("models/tasks/Inspect Sample/medBay_sampleButton_green.png")
+is11 = pygame.image.load("models/tasks/Inspect Sample/medBay_sampleButton_red.png")
+is12 = pygame.image.load("models/tasks/Inspect Sample/medBay_liquid_filled.png")
+anom = random.randint(0,4)
+before = 0
 fills = [0, 0, 0, 0, 0]
+statfilling = 0
+fillingDon = 0
+
+#prime sheild
+psDon = 1
+ps1 = pygame.image.load("models/tasks/Prime Shields/shield_screen.png")
+ps2 = pygame.image.load("models/tasks/Prime Shields/shield_Panel.png")
+ps3 = pygame.image.load("models/tasks/Prime Shields/shield_Panel_red.png")
+ps4 = pygame.image.load("models/tasks/Prime Shields/shield_Gauge100.png")
+psPos = [(417, 203), (538, 131), (541, 273), (419, 346), (295, 276), (295, 132), (416, 60)]
+psred = [random.randint(0, 1) for i in range(7)]
+angle = 0
+
+#stabilize steering
+ssDon = 1
+ss1 = pygame.image.load("models/tasks/Stabilize Steering/nav_stabilize_base.png")
+ss2 = pygame.image.load("models/tasks/Stabilize Steering/nav_stabilize_graph.png")
+ss3 = pygame.image.load("models/tasks/Stabilize Steering/nav_stabilize_target.png")
+
+#Unlock Manifolds
+umDon = 0
+um1 = pygame.image.load("models/tasks/Unlock Manifolds/reactorPanel.png")
+um2 = pygame.image.load("models/tasks/Unlock Manifolds/reactorPanelGlass.png")
+#um3 = pygame.image.load("models/tasks/Unlock Manifolds/reactorButton01.png")
+#um4 = pygame.image.load("models/tasks/Unlock Manifolds/reactorButton02.png")
+nums = {i:pygame.image.load(f"models/tasks/Unlock Manifolds/reactorButton{i}.png") for i in range(1, 11)}
+numPos = []
+while len(numPos) != 10:
+	i = random.randint(1, 10)
+	if i not in numPos:
+		numPos.append(i)
+print(numPos)
 
 def blitRotate(surf, image, pos, originPos, angle):
 
@@ -454,14 +495,84 @@ while True:
 		screen.blit(is1, (250, 22))
 		screen.blit(is2, (257, 274))
 		screen.blit(is3, (285, 221))
-		screen.blit(is4, (285, 184)) #355, 25, 418, 25
+		screen.blit(is4, (285, 184))
+		screen.blit(is7, (248, 406))
 		
-		for i in range(len(fills)):
-			if fills[i] < 100:
-				fills[i] += 1
-				break
+		if statfilling == 1:
+			for i in range(len(fills)):
+				if fills[i] == 100:
+					screen.blit(is6, (360+63*i, 233))
+					if fillingDon == 1:
+						before += 1
+						if anom == i and before > 1000:
+							screen.blit(is9, (360+63*i, 233))
+							screen.blit(is11, (360+63*i, 419))
+							if (360+63*i) < pygame.mouse.get_pos()[0] < (40+360+63*i) and (419) < pygame.mouse.get_pos()[1] < (40+419):
+								if pygame.mouse.get_pressed()[0]:
+									isDon = 1
+						elif before > 1000:
+							screen.blit(is10, (360+63*i, 419))
+							if (360+63*i) < pygame.mouse.get_pos()[0] < (40+360+63*i) and (419) < pygame.mouse.get_pos()[1] < (40+419):
+								if pygame.mouse.get_pressed()[0]:
+									anom = random.randint(0,4)
+									before = 0
+									fills = [0, 0, 0, 0, 0]
+									statfilling = 0
+									fillingDon = 0
 
-		screen.blit(is5, pygame.mouse.get_pos())
+				if fills[i] < 100:
+					screen.blit(is5, (355+60*i, 25))
+					fills[i] += 2
+					break
+
+		if 652 < pygame.mouse.get_pos()[0] < 684 and 468 < pygame.mouse.get_pos()[1] < 498 and pygame.mouse.get_pressed()[0]:
+			statfilling = 1
+		tot = 0
+		for i in fills:
+			tot += i
+		if tot == 500:
+			fillingDon = 1
+
+	if psDon == 0:
+		angle += 1
+		screen.blit(ps1, (238, 25))
+		for i in range(len(psPos)):
+			screen.blit(ps2, psPos[i])
+			if psred[i] == 1:
+				screen.blit(ps3, psPos[i])
+				if psPos[i][0] < pygame.mouse.get_pos()[0] < psPos[i][0]+152 and psPos[i][1] < pygame.mouse.get_pos()[1] < psPos[i][1]+152:
+					if pygame.mouse.get_pressed()[0]:
+						psred[i] = 0
+		blitRotate(screen , ps4, (493, 268), (ps4.get_size()[0]//2, ps4.get_size()[1]//2), angle)
+		#screen.blit(ps4, pygame.mouse.get_pos())
+		tot = 0
+		for i in psred:
+			tot += i
+		if tot == 0:
+			psDon = 1
+
+	if ssDon == 0:
+		screen.blit(ss2, (261, 42))
+		if 251 < pygame.mouse.get_pos()[0] < 730 and 34 < pygame.mouse.get_pos()[1] < 511:
+			pygame.draw.line(screen, (255, 255, 255), (pygame.mouse.get_pos()[0],34), (pygame.mouse.get_pos()[0],511), 5)
+			pygame.draw.line(screen, (255, 255, 255), (251, pygame.mouse.get_pos()[1]), (730, pygame.mouse.get_pos()[1]), 5)
+			screen.blit(ss3, (pygame.mouse.get_pos()[0]-ss3.get_size()[0]//2, pygame.mouse.get_pos()[1]-ss3.get_size()[1]//2))
+
+			if 487 < pygame.mouse.get_pos()[0] < 500 and 269 < pygame.mouse.get_pos()[1] < 281:
+				if pygame.mouse.get_pressed()[0]:
+					ssDon = 1
+		screen.blit(ss1, (241, 23))
+
+	if umDon == 0:
+		screen.blit(um1, (255, 151))
+		for i in range(1, 11):
+			if i > 5:
+				screen.blit(nums[numPos[i-1]], (292+(i-6)*85, 278))
+			else:
+				screen.blit(nums[numPos[i-1]], (292+(i-1)*85, 192))
+
+		screen.blit(um2, (288, 187))
+		#screen.blit(um4, pygame.mouse.get_pos())
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
