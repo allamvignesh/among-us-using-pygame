@@ -144,18 +144,44 @@ ss2 = pygame.image.load("models/tasks/Stabilize Steering/nav_stabilize_graph.png
 ss3 = pygame.image.load("models/tasks/Stabilize Steering/nav_stabilize_target.png")
 
 #Unlock Manifolds
-umDon = 0
+umDon = 1
 um1 = pygame.image.load("models/tasks/Unlock Manifolds/reactorPanel.png")
 um2 = pygame.image.load("models/tasks/Unlock Manifolds/reactorPanelGlass.png")
-#um3 = pygame.image.load("models/tasks/Unlock Manifolds/reactorButton01.png")
-#um4 = pygame.image.load("models/tasks/Unlock Manifolds/reactorButton02.png")
+um3 = pygame.image.load("models/tasks/Unlock Manifolds/reactorWire.png")
+um4 = pygame.image.load("models/tasks/Unlock Manifolds/red.png")
 nums = {i:pygame.image.load(f"models/tasks/Unlock Manifolds/reactorButton{i}.png") for i in range(1, 11)}
 numPos = []
+numDid = 1
 while len(numPos) != 10:
 	i = random.randint(1, 10)
 	if i not in numPos:
 		numPos.append(i)
-print(numPos)
+
+#start reactor
+srDon = 1
+sr1 = pygame.image.load("models/tasks/Start Reactor/simonSaysBase.png")
+sr2 = pygame.image.load("models/tasks/Start Reactor/simonSaysButtonsShadow.png")
+sr3 = pygame.image.load("models/tasks/Start Reactor/simonSaysLightsIndicationWShadows.png")
+sr4 = pygame.image.load("models/tasks/Start Reactor/simonSaysScreen.png")
+sr5 = pygame.image.load("models/tasks/Start Reactor/ssbutton.png")
+sr6 = pygame.image.load("models/tasks/Start Reactor/ssbuttonblue.png")
+sr7 = pygame.image.load("models/tasks/Start Reactor/ssbuttonred.png")
+srDoing = 1
+sr = [random.randint(0,8) for i in range(srDoing)]
+l = 0
+
+#accept power
+apDon = 1
+ap1 = pygame.image.load("models/tasks/Accept Power/1.png")
+ap2 = pygame.image.load("models/tasks/Accept Power/2.png")
+ap3 = pygame.image.load("models/tasks/Accept Power/3.png")
+
+#medbay scan
+msDon = 1
+ms1 = pygame.image.load("models/tasks/Submite Scan/medbayScan_panelBottom.png")
+ms2 = pygame.image.load("models/tasks/Submite Scan/medbayScan_panelTop.png")
+ms3 = pygame.image.load("models/tasks/Submite Scan/medbayScan_wires.png")
+num = 1
 
 def blitRotate(surf, image, pos, originPos, angle):
 
@@ -568,11 +594,93 @@ while True:
 		for i in range(1, 11):
 			if i > 5:
 				screen.blit(nums[numPos[i-1]], (292+(i-6)*85, 278))
+				if numPos[i-1] < numDid:
+					screen.blit(um4, (292+(i-6)*85, 278))
+				if 292+(i-6)*85 < pygame.mouse.get_pos()[0] < 83+292+(i-6)*85 and 278 < pygame.mouse.get_pos()[1] < 278+82:
+					if pygame.mouse.get_pressed()[0]:
+						if numDid == numPos[i-1]:
+							numDid += 1
 			else:
 				screen.blit(nums[numPos[i-1]], (292+(i-1)*85, 192))
+				if numPos[i-1] < numDid:
+					screen.blit(um4, (292+(i-1)*85, 192))
+				if 292+(i-1)*85 < pygame.mouse.get_pos()[0] < 82+292+(i-1)*85 and 192 < pygame.mouse.get_pos()[1] < 192+82:
+					if pygame.mouse.get_pressed()[0]:
+						if numDid == numPos[i-1]:
+							numDid += 1
+		if numDid == 11:
+			umDon = 1
 
 		screen.blit(um2, (288, 187))
-		#screen.blit(um4, pygame.mouse.get_pos())
+		screen.blit(um3, (208, 89))
+	
+	if srDon == 0:
+		screen.blit(sr1, (243, 118))
+		screen.blit(sr1, (520, 118))
+		screen.blit(sr2, (572, 195))
+		screen.blit(pygame.image.load(f"models/tasks/Start Reactor/{srDoing}.png"), (290, 163))
+		screen.blit(pygame.image.load(f"models/tasks/Start Reactor/{len(sr)}.png"), (564, 163))
+		screen.blit(sr4, (290, 199))
+		
+		for i in range(9):
+			#screen.blit(sr5, (575+i*50, 200))
+			if i >= 6:
+				screen.blit(sr5, (575+(i-6)*50, 300))
+				if i == sr[0]:
+					screen.blit(sr6, (295+(i-6)*50, 300))
+			elif i >= 3:
+				screen.blit(sr5, (575+(i-3)*50, 250))
+				if i == sr[0]:
+					screen.blit(sr6, (295+(i-3)*50, 250))
+			else:
+				screen.blit(sr5, (575+i*50, 200))
+				if i == sr[0]:
+					screen.blit(sr6, (295+i*50, 200))
+		butPress = None
+		for i in range(9):
+			if i>=6:
+				if 575+(i-6)*50 < pygame.mouse.get_pos()[0] < 40+575+(i-6)*50 and 300 < pygame.mouse.get_pos()[1] < 300+40:
+					if pygame.mouse.get_pressed()[0]:
+						butPress = i
+			elif i>=3:
+				if 575+(i-3)*50 < pygame.mouse.get_pos()[0] < 40+575+(i-3)*50 and 250 < pygame.mouse.get_pos()[1] < 250+40:
+					if pygame.mouse.get_pressed()[0]:
+						butPress = i
+			else:
+				if 575+i*50 < pygame.mouse.get_pos()[0] < 40+575+i*50 and 200 < pygame.mouse.get_pos()[1] < 200+40:
+					if pygame.mouse.get_pressed()[0]:
+						butPress = i
+		if butPress != None:
+			if butPress == sr[0]:
+				print(butPress)
+				del sr[0]
+				if len(sr) == 0:
+					srDoing += 1
+					sr = [random.randint(0,8) for i in range(srDoing)]
+					print(sr)
+					l = 0
+				if srDoing == 6:
+					srDon = 1
+			else:
+				l += 1
+				if l > 10:
+					srDoing = 1
+					sr = [random.randint(0,8) for i in range(srDoing)]
+					l = 0
+	if apDon == 0:
+		screen.blit(ap2, (160, 58))
+		screen.blit(ap1, (482, 198))
+		if pygame.mouse.get_pressed()[0]:
+			apDon = 1
+
+	if msDon == 0:
+		screen.blit(ms2, (250, 7))
+		screen.blit(ms3, (719, 72))
+		screen.blit(ms1, (250, 372))
+		num += 0.1
+		if num >= 9:
+			num = 1
+		screen.blit(pygame.image.load(f"models/scan/{int(num)}.png"), (488, 256))
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -580,6 +688,8 @@ while True:
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			print(pygame.mouse.get_pos())
-			pass
+		'''if event.type == pygame.KEYDOWN:
+			#if event.unicode.isalpha():
+			print(event.unicode)'''
 	pygame.display.update()
 	clock.tick(fps)
