@@ -71,6 +71,51 @@ ccpos = [344, 430, 507, 597, 673]
 ccPos = [(i, random.randint(178, 353)) for i in ccpos]
 ship = [0, 0, 0, 0, 0]
 
+#weapons
+waDon = 1
+wa1 = pygame.image.load("models/tasks/Clear Asteroids/weapons_base.png")
+wa2 = pygame.image.load("models/tasks/Clear Asteroids/weapons_target.png")
+ast1 = pygame.image.load("models/tasks/Clear Asteroids/weapons_asteroid1.png")
+ast2 = pygame.image.load("models/tasks/Clear Asteroids/weapons_asteroid2.png")
+ast3 = pygame.image.load("models/tasks/Clear Asteroids/weapons_asteroid3.png")
+ast4 = pygame.image.load("models/tasks/Clear Asteroids/weapons_asteroid4.png")
+ast5 = pygame.image.load("models/tasks/Clear Asteroids/weapons_asteroid5.png")
+((322,92), (674, 453))
+astPos = [[(i*322)+322*2, random.randint(92, 400)] for i in range(10)]
+tarPos = [wa1.get_size()[0]//2 + 247, wa1.get_size()[1]//2 + 23]
+asDes = 0
+
+#Divert Power
+dpDon = 1
+dp1 = pygame.image.load("models/tasks/Divert Power/electricity_Divert_Base.png")
+dp2 = pygame.image.load("models/tasks/Divert Power/electricity_Divert_switch.png")
+dpBut = [[288+54*i, 387] for i in range(8)]
+dpto = [1, 0, 0, 0, 0, 0, 0, 0]
+to = 0
+
+#Fual Engine
+feDon = 1
+fe1 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_fillBase.png")
+fe2 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_wires.png")
+fe3 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_buttonBase.png")
+fe4 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_Button.png")
+fe5 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_Light.png")
+fe6 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_LightRed.png")
+en = 0
+
+#fill cans
+fcDon = 1
+fc1 = pygame.image.load("models/tasks/Fuel Engines/engineFuel_gasCanBase.png")
+
+#inspect sample
+isDon = 0
+is1 = pygame.image.load("models/tasks/Inspect Sample/medBay_back.png")
+is2 = pygame.image.load("models/tasks/Inspect Sample/medBay_panelCenter.png")
+is3 = pygame.image.load("models/tasks/Inspect Sample/medBay_glassBack.png")
+is4 = pygame.image.load("models/tasks/Inspect Sample/medBay_glassFrontTestTubes.png")
+is5 = pygame.image.load("models/tasks/Inspect Sample/medBay_dispenser.png")
+fills = [0, 0, 0, 0, 0]
+
 def blitRotate(surf, image, pos, originPos, angle):
 
     # calcaulate the axis aligned bounding box of the rotated image
@@ -303,8 +348,120 @@ while True:
 		else:
 			ccDon = 1
 
+	if waDon == 0:
+		screen.blit(wa1, (247, 23))
 
+		for i in range(len(astPos)):
+			astPos[i][0] -= 5
+		
+		if  277 < astPos[0][0] < 660:
+			screen.blit(ast1, astPos[0])
+		if  277 < astPos[5][0] < 660:
+			screen.blit(ast1, astPos[5])
+		if  277 < astPos[1][0] < 660:
+			screen.blit(ast2, astPos[1])
+		if  277 < astPos[6][0] < 660:
+			screen.blit(ast2, astPos[6])
+		if  277 < astPos[2][0] < 660:
+			screen.blit(ast3, astPos[2])
+		if  277 < astPos[7][0] < 660:
+			screen.blit(ast3, astPos[7])
+		if  277 < astPos[3][0] < 660:
+			screen.blit(ast4, astPos[3])
+		if  277 < astPos[8][0] < 660:
+			screen.blit(ast4, astPos[8])
+		if  277 < astPos[4][0] < 660:
+			screen.blit(ast5, astPos[4])
+		if  277 < astPos[9][0] < 660:
+			screen.blit(ast5, astPos[9])
+		if 322 < pygame.mouse.get_pos()[0] < 674 and 92 < pygame.mouse.get_pos()[1] < 453: 
+			if pygame.mouse.get_pressed()[0]:
+				tarPos = pygame.mouse.get_pos()
+				for i in range(len(astPos)):
+					if astPos[i][0] < tarPos[0] < astPos[i][0]+100 and astPos[i][1] < tarPos[1] < astPos[i][1]+100:
+						astPos[i] = [0, -200]
+						asDes += 1
+		screen.blit(wa2, (tarPos[0] - wa2.get_size()[0]//2, tarPos[1] - wa2.get_size()[1]//2))
 
+		if asDes > 9:
+			waDon = 1
+
+	if dpDon == 0:
+		screen.blit(dp1, (249, 26))
+		for i in dpBut:
+			ind = dpBut.index(i)
+			if dpto[ind] == 1:
+				if i[0] < pygame.mouse.get_pos()[0] < i[0]+45 and i[1] < pygame.mouse.get_pos()[1] < i[1]+30:
+					if pygame.mouse.get_pressed()[0]:
+						dpBut[ind][1] = pygame.mouse.get_pos()[1]-15
+						if dpBut[ind][1] < 350:
+							dpto[ind] = 0
+						if dpBut[ind][1] > 450:
+							dpBut[ind][1] = 445
+			screen.blit(dp2, i)
+		for i in range(len(dpto)):
+			if dpto[i] == 1:
+				to = i
+			sur = pygame.surface.Surface([15, 50])
+			sur.fill((255, 255, 0)) #301, 227, 354, 228
+			screen.blit(sur, (305 + i*54, 227))
+		if dpto[to] == 0:
+			screen.blit(sur, (305 + to*54, 200))
+			dpDon = 1
+
+	if feDon == 0:
+		sur = pygame.surface.Surface([90, 65])
+		sur.fill((255, 255, 0))
+		screen.blit(sur, (498+en, 45))
+		#444, 118, 527, 432
+		sur = pygame.surface.Surface([83, 314])
+		sur.fill((255, 255, 0))
+		screen.blit(sur, (444, 432-int(en)*5))
+		screen.blit(fe1, (324, 23))
+		if 432-int(en)*5 < 118:
+			feDon = 1
+		screen.blit(fe2, (661, 397))
+		screen.blit(fe3, (711, 356))
+		screen.blit(fe4, (735, 379))
+		if 735 < pygame.mouse.get_pos()[0] < 811 and 379 < pygame.mouse.get_pos()[1] < 456:
+			if pygame.mouse.get_pressed()[0]:
+				screen.blit(fe4, (735, 382))
+				en += 0.5
+		screen.blit(fe5, (777, 335))
+		screen.blit(fe6, (741, 335))
+		screen.blit(fe5, pygame.mouse.get_pos())
+
+	if fcDon == 0:
+		sur = pygame.surface.Surface([300, 320]) #344, 80
+		sur.fill((255, 255, 0))
+		screen.blit(sur, (344, 413-int(en)*5))
+		screen.blit(fc1, (324, 23))
+		
+		if 413-int(en)*5 < 105:
+			fcDon = 1
+
+		screen.blit(fe2, (661, 397))
+		screen.blit(fe3, (711, 356))
+		screen.blit(fe4, (735, 379))
+		if 735 < pygame.mouse.get_pos()[0] < 811 and 379 < pygame.mouse.get_pos()[1] < 456:
+			if pygame.mouse.get_pressed()[0]:
+				screen.blit(fe4, (735, 382))
+				en += 0.5
+		screen.blit(fe5, (777, 335))
+		screen.blit(fe6, (741, 335))
+
+	if isDon == 0:
+		screen.blit(is1, (250, 22))
+		screen.blit(is2, (257, 274))
+		screen.blit(is3, (285, 221))
+		screen.blit(is4, (285, 184)) #355, 25, 418, 25
+		
+		for i in range(len(fills)):
+			if fills[i] < 100:
+				fills[i] += 1
+				break
+
+		screen.blit(is5, pygame.mouse.get_pos())
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
