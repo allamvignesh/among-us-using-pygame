@@ -643,7 +643,6 @@ def fualEngine():
 				en += 0.5
 		screen.blit(fe5, (777, 335))
 		screen.blit(fe6, (741, 335))
-		screen.blit(fe5, pygame.mouse.get_pos())
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -983,54 +982,55 @@ def medbayScan():
 		clock.tick(fps)
 
 
-Tasks = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0]
-while True:
+if __name__ == '__main__':
+	Tasks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+	while True:
 
-	screen.fill((255, 0, 0))
+		screen.fill((255, 0, 0))
 
-	if Tasks[0] == 0:
-		Tasks[0] = swipeCard()
-	elif Tasks[1] == 0:
-		Tasks[1] = fixWiring()
-	elif Tasks[2] == 0:
-		Tasks[2] = emptyGarbage()
-	elif Tasks[3] == 0:
-		Tasks[3] = upload()
-	elif Tasks[4] == 0:
-		Tasks[4] = upload(1)
-	elif Tasks[5] == 0:
-		Tasks[5] = clearLeaves()
-	elif Tasks[6] == 0:
-		Tasks[6] = alignEngine()
-	elif Tasks[7] == 0:
-		Tasks[7] = calibrate()
-	elif Tasks[8] == 0:
-		Tasks[8] = chartCourse()
-	elif Tasks[9] == 0:
-		Tasks[9] = weapons()
-	elif Tasks[10] == 0:
-		Tasks[10] = divertPower(1)
-	elif Tasks[11] == 0:
-		Tasks[11] = fualEngine()
-	elif Tasks[12] == 0:
-		Tasks[12] = fillCan()
-	elif Tasks[13] == 0:
-		Tasks[13] = inspectSample()
-	elif Tasks[14] == 0:
-		Tasks[14] = primeShield()
-	elif Tasks[15] == 0:
-		Tasks[15] = stabSteering()
-	elif Tasks[16] == 0:
-		Tasks[16] = starReactor()
-	elif Tasks[17] == 0:
-		Tasks[17] = acceptPower()
-	elif Tasks[18] == 0:
-		Tasks[18] = medbayScan()
+		if Tasks[0] == 0:
+			Tasks[0] = swipeCard()
+		elif Tasks[1] == 0:
+			Tasks[1] = fixWiring()
+		elif Tasks[2] == 0:
+			Tasks[2] = emptyGarbage()
+		elif Tasks[3] == 0:
+			Tasks[3] = upload()
+		elif Tasks[4] == 0:
+			Tasks[4] = upload(1)
+		elif Tasks[5] == 0:
+			Tasks[5] = clearLeaves()
+		elif Tasks[6] == 0:
+			Tasks[6] = alignEngine()
+		elif Tasks[7] == 0:
+			Tasks[7] = calibrate()
+		elif Tasks[8] == 0:
+			Tasks[8] = chartCourse()
+		elif Tasks[9] == 0:
+			Tasks[9] = weapons()
+		elif Tasks[10] == 0:
+			Tasks[10] = divertPower(1)
+		elif Tasks[11] == 0:
+			Tasks[11] = fualEngine()
+		elif Tasks[12] == 0:
+			Tasks[12] = fillCan()
+		elif Tasks[13] == 0:
+			Tasks[13] = inspectSample()
+		elif Tasks[14] == 0:
+			Tasks[14] = primeShield()
+		elif Tasks[15] == 0:
+			Tasks[15] = stabSteering()
+		elif Tasks[16] == 0:
+			Tasks[16] = starReactor()
+		elif Tasks[17] == 0:
+			Tasks[17] = acceptPower()
+		elif Tasks[18] == 0:
+			Tasks[18] = medbayScan()
 
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			exit()
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				exit()
 
-	pygame.display.update()
-	clock.tick(fps)
+		pygame.display.update()
+		clock.tick(fps)
