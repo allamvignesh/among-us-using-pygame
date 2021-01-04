@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 import numpy
 import math
+from Tasks import swipeCard
 
 pygame.init()
 

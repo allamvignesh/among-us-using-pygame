@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
 	clock = pygame.time.Clock()
 	fps = 50
-	size =[800, 550]
+	size =[1000, 550]
 	screen = pygame.display.set_mode(size)
 
 	players = pygame.sprite.Group()
