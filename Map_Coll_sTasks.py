@@ -599,13 +599,13 @@ while True:
 		tasks.image = taskson
 
 	#dead
-	dead = [(20, 100)]
+	dead = [(200, 100)]
 	dead_grp = pygame.sprite.Group()
 	reportbut = 0
 	for i in range(len(dead)):
 		ded = dead[i]
 		dead[i] = Sprite(100, 100)
-		dead[i].rect.x, dead[i].rect.y = ded[0]+a, ded[1]+b
+		dead[i].rect.center = ded[0]+a, ded[1]+b
 		dead_grp.add(dead[i])
 
 	dead_grp.draw(screen)
