@@ -2,6 +2,8 @@ import pygame
 from pygame.locals import *
 from walk_anim import Player
 import pickle
+from Tasks import Tasks
+from threading import Thread
 
 pygame.init()
 
@@ -9,6 +11,9 @@ clock = pygame.time.Clock()
 fps = 60
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
+screen.set_colorkey('#000000')
+
+tasksToDo = None
 
 a = 0
 b = 0
@@ -201,6 +206,7 @@ vent = Sprite(surface = pygame.image.load("models/buttons/vent.png"))
 kill = Sprite(surface = pygame.image.load("models/buttons/kill.png"))
 killon = pygame.image.load("models/buttons/kill.png")
 killoff = pygame.image.load("models/buttons/kill_off.png")
+security = Sprite(surface = pygame.image.load("models/buttons/security.png"))
 
 mousebut = Sprite()
 
@@ -209,8 +215,9 @@ mousebut.rect.x, mousebut.rect.y = 0, 0
 tasks.rect.x, tasks.rect.y = 897, 446
 report.rect.x, report.rect.y = 892, 333
 sabotage.rect.x, sabotage.rect.y = 897, 446
-vent.rect.x, vent.rect.y = 787, 448
+vent.rect.x, vent.rect.y = 897, 446
 kill.rect.x, kill.rect.y = 789, 444
+security.rect.x, security.rect.y = 789, 444
 
 button_group = pygame.sprite.Group()
 button_group.add(tasks)
@@ -218,6 +225,7 @@ button_group.add(report)
 button_group.add(sabotage)
 button_group.add(vent)
 button_group.add(kill)
+button_group.add(security)
 
 but = [tasks, report, sabotage, vent, kill]
 mous_grp = pygame.sprite.Group()
@@ -238,8 +246,14 @@ tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), (920, 2
 			(1409, 1422, 10, 10), (1176, 1769, 10, 10), (1056, 1760, 10, 10), (922, 1972, 10, 10), (887, 1771, 10, 10), (612, 1981, 10, 10), (254, 1724, 10, 10), (-256, 1432, 10, 10), (-266, 1201, 10, 10), (-206, 1201, 10, 10), (-111, 1201, 10, 10), (54, 1201, 10, 10),
 			(-67, 997, 10, 10), (-13, 936, 10, 10), (-518, 815, 10, 10), (-475, 833, 10, 10), (-719, 956, 10, 10), (-990, 1626, 10, 10), (-1007, 1617, 10, 10), (-978, 1330, 10, 10), (-1001, 588, 10, 10), (-917, 284, 10, 10),
 			(639, 1091, 10, 10), (738, 1072, 10, 10), (808, 1265, 10, 10), (1012, 1265, 10, 10), (1078, 1088, 10, 10), (362, 1294, 10, 10),
-			(-1316, 1020, 10, 10), (-1156, 799, 10, 10), (-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), (340, 402, 220, 150)]
+			(-1316, 1020, 10, 10), (-1156, 799, 10, 10), (-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), (340, 402, 220, 150), (-1071, 610, 10, 10)]
 
+
+ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:6, 15:18, 16:14,
+		17:1, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
+		44:18, 31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6}
+
+DoTo = []
 
 taskmgr = [Sprite(k+40, l+40) for i,j,k,l in tskpos]
 
@@ -250,6 +264,14 @@ for i in range(len(taskmgr)):
 
 dead_bodys = [(100, 100, 100, 100)]
 f = []
+Tasks = Tasks()
+
+#secCam
+secCam = 0
+secC1 = pygame.image.load("models/tasks/Security Camera/sec-2.png")
+secC2 = pygame.image.load("models/tasks/Security Camera/sec-1.png")
+secC3 = pygame.image.load("models/tasks/Security Camera/sec-3.png")
+secCNum = 1
 
 while True:
 	c += 1
@@ -268,13 +290,57 @@ while True:
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+
+			print(a, b)
+
 			f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
 			for i in range(len(but)):
 				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
 				if smashhit and pygame.mouse.get_pressed()[0]:
-					print(i)
+					if tasksToDo in ToDo and not imposter:
+						if ToDo[tasksToDo] == 0:
+							print(Tasks.swipeCard())
+						elif ToDo[tasksToDo] == 1:
+							print(Tasks.fixWiring())
+						elif ToDo[tasksToDo] == 2:
+							print(Tasks.emptyGarbage())
+						elif ToDo[tasksToDo] == 3:
+							print(Tasks.upload())
+						elif ToDo[tasksToDo] == 4:
+							print(Tasks.Download(1))
+						elif ToDo[tasksToDo] == 5:
+							print(Tasks.clearLeaves())
+						elif ToDo[tasksToDo] == 6:
+							print(Tasks.alignEngine())
+						elif ToDo[tasksToDo] == 7:
+							print(Tasks.calibrate())
+						elif ToDo[tasksToDo] == 8:
+							print(Tasks.chartCourse())
+						elif ToDo[tasksToDo] == 9:
+							print(Tasks.weapons())
+						elif ToDo[tasksToDo] == 10:
+							print(Tasks.divertPower(1))
+						elif ToDo[tasksToDo] == 11:
+							print(Tasks.fualEngine())
+						elif ToDo[tasksToDo] == 12:
+							print(Tasks.fillCan())
+						elif ToDo[tasksToDo] == 13:
+							print(Tasks.inspectSample())
+						elif ToDo[tasksToDo] == 14:
+							print(Tasks.primeShield())
+						elif ToDo[tasksToDo] == 15:
+							print(Tasks.stabSteering())
+						elif ToDo[tasksToDo] == 16:
+							print(Tasks.unlockManifolds())
+						elif ToDo[tasksToDo] == 17:
+							print(Tasks.starReactor())
+						elif ToDo[tasksToDo] == 18:
+							print(Tasks.acceptPower())
+						elif ToDo[tasksToDo] == 19:
+							print(Tasks.medbayScan())
+
 	keys = pygame.key.get_pressed()
 	if keys[K_w]:
 		b += 3
@@ -466,6 +532,7 @@ while True:
 	screen.blit(weapons10, (1274+a , 360+b))
 	s = pygame.surface.Surface([10, 10])
 	screen.blit(s, pygame.mouse.get_pos())
+	security.rect.x, security.rect.y = 0, -200
 	task_group.draw(screen)
 
 	for i in range(len(taskmgr)):
@@ -475,10 +542,19 @@ while True:
 	for i in range(len(taskmgr)):
 		if pygame.sprite.collide_rect(player, taskmgr[i]) == 1:
 			todo = 1
+			tasksToDo = i
 			tasks.image = taskson
+			if i == 29:
+				security.rect.x, security.rect.y = 789, 444
+				if pygame.mouse.get_pressed()[0]:
+					cc = a, b
+					secCam = 1
+			else:
+				security.rect.x, security.rect.y = 0, -200
 		else:
 			tasks.image = tasksoff
 	if todo == 1:
+		#print(tasksToDo)
 		tasks.image = taskson
 
 	#dead
@@ -553,6 +629,7 @@ while True:
 	else:
 		screen.blit(low4, (-1088+a, 349+b))
 	screen.blit(rec1, (-1466+a, 824+b))
+	screen.blit(low5, (-1074+a, 563+b))
 
 	a, b = coll
 
@@ -561,7 +638,39 @@ while True:
 
 	#screen.blit(kill, pygame.mouse.get_pos())
 
+	if secCam == 1:
+
+		screen.blit(secC1, (-200, 0))
+		screen.blit(secC2, (809, 245))
+		screen.blit(secC3, (82, 230))
+		#1365 -720, 785 -99, 5 -825, -1025 -660
+		if 809 < pygame.mouse.get_pos()[0] < 809+60 and 245 < pygame.mouse.get_pos()[1] < 245+60 and pygame.mouse.get_pressed()[0]:
+			secCNum += 0.5
+			if secCNum > 5:
+				secCNum = 1
+			print(int(secCNum))
+		if 82 < pygame.mouse.get_pos()[0] < 82+60 and 230 < pygame.mouse.get_pos()[1] < 230+60 and pygame.mouse.get_pressed()[0]:
+			secCNum -= 0.5
+			if secCNum < 1:
+				secCNum = 4.5
+			print(int(secCNum))
+		if int(secCNum) == 1:
+			a, b = (1365, -720)
+		elif int(secCNum) == 2:
+			a, b = (785, -99)
+		elif int(secCNum) == 3:
+			a, b = 5, -825
+		else:
+			a, b = -1025, -660
+		close = pygame.image.load("models/buttons/close.png")
+		screen.blit(close, (100, 25))
+		if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
+			secCam = 0
+			a, b = cc
+			cc = None
+		#screen.blit(secC2, pygame.mouse.get_pos())
+
 	#wall_group.draw(screen)
-	players.update()
+	players.update(secCam)
 	pygame.display.update()
 	clock.tick(fps)

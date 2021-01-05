@@ -16,10 +16,13 @@ class Player(pygame.sprite.Sprite):
 		self.x = 0
 		self.y = 0
 
-	def update(self):
+	def update(self, secCam):
 		self.rect.x = 1000//2
 		self.rect.y = 550//2
 		keys = pygame.key.get_pressed()
+
+		if secCam == 1:
+			self.rect.bottomright = (0, 0)
 		if keys[K_d]:
 			self.flip = 1
 			self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
