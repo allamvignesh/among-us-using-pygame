@@ -37,6 +37,3 @@ def getComp():
 def getAllTasks():
 	AllTasks = getWiring() + getPowerTo() + getDownload() + getChoice() + getGarbage() + getComp()
 	return AllTasks
-
-
-print(getAllTasks())

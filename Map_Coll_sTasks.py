@@ -26,8 +26,7 @@ Text2 = 'divert and accept power '
 Text3 = 'Download and Upload '
 
 Text4 = f'{AllTasks[3][0]} '
-
-if str(AllTasks[4][0]).isalpha():
+if str(AllTasks[4][0])[0].isalpha():
 	Text5 = f'{AllTasks[4][0]} '
 else:
 	Text5 = 'Usual Tasks '
@@ -36,9 +35,10 @@ Text6 = 'Main Tasks '
 
 for i in range(len(AllTasks)):
 	for j in range(len(AllTasks[i])):
-		if str(AllTasks[i][j]).isalpha():
-			AllTasks[i][j] = -1
-			print('gg')
+		if str(AllTasks[i][j])[0].isalpha():
+			print(AllTasks[i][j])
+			del AllTasks[i][j]
+			break
 print(AllTasks)
 tasksToDo = None
 
@@ -277,7 +277,7 @@ tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), (920, 2
 
 
 ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:15, 15:18, 16:14,
-		17:18, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
+		17:18, 19:3, 21:12, 20:2, 42:1, 23:3, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
 		31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6}
 #print(len(ToDo))
 DoTo = []
@@ -327,10 +327,14 @@ while True:
 			for i in range(len(but)):
 				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
 				if smashhit and pygame.mouse.get_pressed()[0]:
+					oo = []
 					for i in AllTasks:
-						print(i[0])
-					if tasksToDo in ToDo and not imposter:
-						print(tasksToDo)
+						if len(i) != 0:
+							oo.append(i[0])
+						else:
+							oo.append(-10)
+					#print(oo)
+					if tasksToDo in ToDo and not imposter and tasksToDo in oo:
 						score = 0
 						if ToDo[tasksToDo] == 0:
 							score = Tasks.swipeCard()
@@ -373,7 +377,10 @@ while True:
 						elif ToDo[tasksToDo] == 19:
 							score = Tasks.medbayScan()
 						if score == 1:
-							print('Done')
+							ids = oo.index(tasksToDo)
+							del AllTasks[ids][0]
+							print(AllTasks)
+
 
 	keys = pygame.key.get_pressed()
 	if keys[K_w]:
@@ -716,17 +723,19 @@ while True:
 
 		text3 = font.render(Text3+f'({len(AllTasks[2])})', True, (255, 255, 255))
 		if len(AllTasks[2]) == 0:
-			text1 = font.render(Text1, True, (0, 255, 0))
+			text3 = font.render(Text3, True, (0, 255, 0))
 
-		text4 = font.render(Text4+f'({len(AllTasks[3][1:])})', True, (255, 255, 255))
+		text4 = font.render(Text4+f'({len(AllTasks[3])})', True, (255, 255, 255))
+		if len(AllTasks[3]) == 0:
+			text4 = font.render(Text4, True, (0, 255, 0))
 
-		if str(AllTasks[4][0]).isalpha():
-			l = f'({len(AllTasks[4][1:])})'
-		else:
-			l = f'({len(AllTasks[4])})'
-		text5 = font.render(Text5+l, True, (255, 255, 255))
+		text5 = font.render(Text5+f'({len(AllTasks[4])})', True, (255, 255, 255))
+		if len(AllTasks[4]) == 0:
+			text5 = font.render(Text5, True, (0, 255, 0))
 
 		text6 = font.render(Text6+f'({len(AllTasks[5])})', True, (255, 255, 255))
+		if len(AllTasks[5]) == 0:
+			text6 = font.render(Text6, True, (0, 255, 0))
 
 		
 		textRect1 = text1.get_rect()

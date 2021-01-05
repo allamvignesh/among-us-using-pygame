@@ -688,13 +688,13 @@ class Tasks():
 			pygame.display.update()
 			clock.tick(fps)
 
-	def divertPower(self, i):
+	def divertPower(self, station):
 		dpDon = 1
 		dp1 = pygame.image.load("models/tasks/Divert Power/electricity_Divert_Base.png")
 		dp2 = pygame.image.load("models/tasks/Divert Power/electricity_Divert_switch.png")
 		dpBut = [[288+54*i, 387] for i in range(8)]
 		dpto = [0, 0, 0, 0, 0, 0, 0, 0]
-		dpto[i] = 1
+		dpto[station] = 1
 		to = 0
 
 		while True:
@@ -1167,7 +1167,7 @@ class Tasks():
 
 
 if __name__ == '__main__':
-	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 	#Task = [0 for i in range(20)]
 	ta = Tasks()
 
@@ -1198,7 +1198,7 @@ if __name__ == '__main__':
 		elif Task[9] == 0:
 			Task[9] = ta.weapons()
 		elif Task[10] == 0:
-			Task[10] = ta.divertPower(1)
+			Task[10] = ta.divertPower(2)
 		elif Task[11] == 0:
 			Task[11] = ta.fualEngine()
 		elif Task[12] == 0:
