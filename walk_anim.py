@@ -3,7 +3,9 @@ from pygame.locals import *
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, location = "images/Sprites/idle.png"):
+		
 		pygame.sprite.Sprite.__init__(self)
+		
 		self.image = pygame.image.load(location)
 		self.image = pygame.transform.scale(self.image, (78-20,103-26))
 		self.location = location
@@ -30,21 +32,15 @@ class Player(pygame.sprite.Sprite):
 			self.x = 1
 		elif keys[K_a]:
 			self.flip = 0
-			self.image = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png"), True, False)
+			self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
 			self.move += self.speed
 			self.x = 1
 		elif keys[K_w]:
-			if self.flip == 0:
-				self.image = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png"), True, False)
-			else:
-				self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
+			self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
 			self.move += self.speed
 			self.y = 1
 		elif keys[K_s]:
-			if self.flip == 0:
-				self.image = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png"), True, False)
-			else:
-				self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
+			self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")
 			self.move += self.speed
 			self.y = 1
 		else:
@@ -53,6 +49,8 @@ class Player(pygame.sprite.Sprite):
 			self.x, self.y = 0, 0
 		if self.move == 13:
 			self.move = 1
+		if self.flip == 0:
+			self.image = pygame.transform.flip(self.image, True, False)
 		
 		self.image = pygame.transform.scale(self.image, (78-20,103-26))
 
@@ -94,5 +92,5 @@ if __name__ == '__main__':
 		players.draw(screen)
 
 		pygame.display.update()
-		players.update()
+		players.update(0)
 		clock.tick(fps)

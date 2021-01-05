@@ -13,6 +13,7 @@ close = pygame.image.load("models/buttons/close.png")
 class Tasks():
 	def __init__(self):
 		self.tasks = [0 for i in range(20)]
+		self.tasks = [1 for i in range(20)]
 		#print(self.tasks)
 	
 	def blitRotate(self, surf, image, pos, originPos, angle):
@@ -1117,7 +1118,7 @@ class Tasks():
 
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				return 0
-			if pygame.mouse.get_pressed()[0]:
+			if 458 < pygame.mouse.get_pos()[0] < 552 and 238 < pygame.mouse.get_pos()[1] < 311 and pygame.mouse.get_pressed()[0]:
 				self.tasks[18] = 1
 				return 1
 
@@ -1166,15 +1167,15 @@ class Tasks():
 
 
 if __name__ == '__main__':
-	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-	Task = [0 for i in range(20)]
+	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1]
+	#Task = [0 for i in range(20)]
 	ta = Tasks()
 
 	while True:
 
 		screen.fill((255, 0, 0))
 
-		print(ta.tasks)
+		#print(ta.tasks)
 
 		if Task[0] == 0:
 			Task[0] = ta.swipeCard()

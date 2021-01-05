@@ -249,10 +249,10 @@ tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), (920, 2
 			(-1316, 1020, 10, 10), (-1156, 799, 10, 10), (-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), (340, 402, 220, 150), (-1071, 610, 10, 10)]
 
 
-ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:6, 15:18, 16:14,
-		17:1, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
-		44:18, 31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6}
-
+ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:15, 15:18, 16:14,
+		17:18, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
+		31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6}
+#print(len(ToDo))
 DoTo = []
 
 taskmgr = [Sprite(k+40, l+40) for i,j,k,l in tskpos]
@@ -286,13 +286,14 @@ while True:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			pygame.quit()
-			print(f)
+			##print(f)
+			##print('\n\n', tskpos)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			##print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			##print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
 
-			print(a, b)
+			#print(a, b)
 
 			f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
@@ -300,46 +301,47 @@ while True:
 				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
 				if smashhit and pygame.mouse.get_pressed()[0]:
 					if tasksToDo in ToDo and not imposter:
+						print(tasksToDo)
 						if ToDo[tasksToDo] == 0:
-							print(Tasks.swipeCard())
+							Tasks.swipeCard()
 						elif ToDo[tasksToDo] == 1:
-							print(Tasks.fixWiring())
+							Tasks.fixWiring()
 						elif ToDo[tasksToDo] == 2:
-							print(Tasks.emptyGarbage())
+							Tasks.emptyGarbage()
 						elif ToDo[tasksToDo] == 3:
-							print(Tasks.upload())
+							Tasks.upload()
 						elif ToDo[tasksToDo] == 4:
-							print(Tasks.Download(1))
+							Tasks.Download(1)
 						elif ToDo[tasksToDo] == 5:
-							print(Tasks.clearLeaves())
+							Tasks.clearLeaves()
 						elif ToDo[tasksToDo] == 6:
-							print(Tasks.alignEngine())
+							Tasks.alignEngine()
 						elif ToDo[tasksToDo] == 7:
-							print(Tasks.calibrate())
+							Tasks.calibrate()
 						elif ToDo[tasksToDo] == 8:
-							print(Tasks.chartCourse())
+							Tasks.chartCourse()
 						elif ToDo[tasksToDo] == 9:
-							print(Tasks.weapons())
+							Tasks.weapons()
 						elif ToDo[tasksToDo] == 10:
-							print(Tasks.divertPower(1))
+							Tasks.divertPower(1)
 						elif ToDo[tasksToDo] == 11:
-							print(Tasks.fualEngine())
+							Tasks.fualEngine()
 						elif ToDo[tasksToDo] == 12:
-							print(Tasks.fillCan())
+							Tasks.fillCan()
 						elif ToDo[tasksToDo] == 13:
-							print(Tasks.inspectSample())
+							Tasks.inspectSample()
 						elif ToDo[tasksToDo] == 14:
-							print(Tasks.primeShield())
+							Tasks.primeShield()
 						elif ToDo[tasksToDo] == 15:
-							print(Tasks.stabSteering())
+							Tasks.stabSteering()
 						elif ToDo[tasksToDo] == 16:
-							print(Tasks.unlockManifolds())
+							Tasks.unlockManifolds()
 						elif ToDo[tasksToDo] == 17:
-							print(Tasks.starReactor())
+							Tasks.starReactor()
 						elif ToDo[tasksToDo] == 18:
-							print(Tasks.acceptPower())
+							Tasks.acceptPower()
 						elif ToDo[tasksToDo] == 19:
-							print(Tasks.medbayScan())
+							Tasks.medbayScan()
 
 	keys = pygame.key.get_pressed()
 	if keys[K_w]:
@@ -554,7 +556,7 @@ while True:
 		else:
 			tasks.image = tasksoff
 	if todo == 1:
-		#print(tasksToDo)
+		##print(tasksToDo)
 		tasks.image = taskson
 
 	#dead
@@ -648,12 +650,12 @@ while True:
 			secCNum += 0.5
 			if secCNum > 5:
 				secCNum = 1
-			print(int(secCNum))
+			#print(int(secCNum))
 		if 82 < pygame.mouse.get_pos()[0] < 82+60 and 230 < pygame.mouse.get_pos()[1] < 230+60 and pygame.mouse.get_pressed()[0]:
 			secCNum -= 0.5
 			if secCNum < 1:
 				secCNum = 4.5
-			print(int(secCNum))
+			#print(int(secCNum))
 		if int(secCNum) == 1:
 			a, b = (1365, -720)
 		elif int(secCNum) == 2:
