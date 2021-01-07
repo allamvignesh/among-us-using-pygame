@@ -25,7 +25,7 @@ players = []
 colors = [(0,0,0), (0,0,255), (0,255,0), (255,0,0), (255,255,0),(0,255,255), (255,0,255), (255,255,255), (255,69,0), (165,42,42)]
 pos = [(0,0), (100,0), (200,0), (300,0), (400,0), (0,100), (100,100), (200,100), (300,100), (400,100)]
 for i in range(10):
-	players.append(pygame.image.load("idle.png"))
+	players.append(pygame.image.load("images/Sprites/idle.png"))
 	players[-1] = colorchanger(players[-1], colors[i])
 while True:
 	screen.fill((255, 255, 255))

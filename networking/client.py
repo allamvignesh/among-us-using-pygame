@@ -16,6 +16,7 @@ class client():
 	def send(self,msg):
 		self.client.send(str(msg).encode(self.FORMAT))
 		return self.client.recv(2048).decode(self.FORMAT)
+
 if __name__ == "__main__":
 	a = client()
 	while True:

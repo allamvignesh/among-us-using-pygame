@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from client import client
+#from all_colors import colorchanger
 
 pygame.init()
 
@@ -9,8 +10,19 @@ print(s.send((0, 0, 1)))
 #input()
 clock = pygame.time.Clock()
 fps = 50
-size =[800, 550]
+size =[1000, 550]
 screen = pygame.display.set_mode(size)
+
+def colorchanger(surface, color):
+	"""Fill all pixels of the surface with color, preserve transparency."""
+	surface = surface.convert_alpha()
+	w, h = surface.get_size()
+	r, g, b = color
+	for x in range(w):
+		for y in range(h):
+			if surface.get_at((x,y)) == (255, 0, 0, 255):
+				surface.set_at((x, y), pygame.Color(r, g, b, 255))
+	return surface
 
 class Sprite(pygame.sprite.Sprite):
 	def __init__(self, location = "idle.png"):
@@ -25,7 +37,7 @@ class Sprite(pygame.sprite.Sprite):
 		self.move = 1
 		self.flip = False
 
-	def update(self):
+	def update(self, color):
 		keys = pygame.key.get_pressed()
 		if keys[K_w]:
 			self.image = pygame.image.load(f"Walk/walkcolor00{int(self.move)}.png")
@@ -51,13 +63,17 @@ class Sprite(pygame.sprite.Sprite):
 			self.move = 1
 		
 		self.image = pygame.transform.scale(self.image, (78-25,103-30))
+		self.image = colorchanger(self.image, color)
 
 
-
+color = eval(input('Enter COLOR: '))
 players = pygame.sprite.Group()
 player = Sprite()
 players.add(player)
 a, b = 0, 0
+player.rect.x, player.rect.y = 1000//2, 550//2
+caf = pygame.image.load("map.png")
+
 while True:
 	screen.fill((255, 255, 255))
 
@@ -68,30 +84,35 @@ while True:
 			exit()
 
 	keys = pygame.key.get_pressed()
-	if keys[K_w] and player.rect.y > 0:
+	if keys[K_w]:
 		b -= 10
-	if keys[K_a] and player.rect.x > 0:
+	if keys[K_a]:
 		a -= 10
-	if keys[K_s] and player.rect.y < 500:
+	if keys[K_s]:
 		b += 10
-	if keys[K_d] and player.rect.x < 750:
+	if keys[K_d]:
 		a += 10
 
-	players.draw(screen)
+	screen.blit(caf, (-a, -b))
 
-	pos = s.send((a, b, player.move, player.flip))
+	server_info = s.send((a+(1000//2), b+(550//2), player.move, player.flip, color))
 	try:
-		pos = eval(pos)
-		for i in pos:
+		server_info = eval(server_info)
+		for i in server_info:
 			if i != s.name:
-				pos[i] = eval(pos[i])
-				player2 = pygame.transform.flip(pygame.image.load(f"Walk/walkcolor00{int(pos[i][2])}.png"), pos[i][3], False)
+				server_info[i] = eval(server_info[i])
+				player2 = pygame.transform.flip(pygame.image.load(f"Walk/walkcolor00{int(server_info[i][2])}.png"), server_info[i][3], False)
+				if int(server_info[i][2]) == 1:
+					player2 = pygame.image.load('idle.png')
 				player2 = pygame.transform.scale(player2, (78-25,103-30))
-				screen.blit(player2, (int(pos[i][0]), int(pos[i][1])))
+				player2 = colorchanger(player2, server_info[i][4])
+				screen.blit(player2, (int(server_info[i][0])-a, int(server_info[i][1])-b))
 
 	except Exception as e:
 		print(f'{e} Happened')
 
+	players.draw(screen)
+
 	pygame.display.update()
-	players.update()
+	players.update(color)
 	clock.tick(fps)

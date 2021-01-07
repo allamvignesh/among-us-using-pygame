@@ -17,10 +17,10 @@ def handle_client(conn, addr, name='supper'):
 
     #player_pos contains the position of each user
     player_pos[name] = (0,0)
+    player_index = len(player_pos)-1
     connected = True
 
     while connected:
-        print(player_pos)
         
         #disconnect properly only if disconnect message comes
         msg = conn.recv(2048).decode(FORMAT)
@@ -29,7 +29,7 @@ def handle_client(conn, addr, name='supper'):
             connected = False
         else:        
             print(f"[{addr}] {msg}")
-            player_pos[name] = msg
+            player_pos[name] = msg[:-1] + ', ' + str(player_index) +', "' + name + '")'
             conn.send(str(player_pos).encode(FORMAT))
     conn.close()
     del player_pos[name]
@@ -45,8 +45,8 @@ def start():
 
         #getting the address of the user
         conn, addr = server.accept()
-        if len(player_pos) >= 10:
-            conn.send('hey'.encode(FORMAT))
+        if len(player_pos) > 10:
+            conn.send('hey um 10 players are playing'.encode(FORMAT))
         
         #starting the thread for a perticular address
         name = conn.recv(2048).decode(FORMAT)

@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
 		self.x = 0
 		self.y = 0
 
-	def update(self, secCam):
+	def update(self, secCam, color):
 		self.rect.x = 1000//2
 		self.rect.y = 550//2
 		keys = pygame.key.get_pressed()
@@ -52,7 +52,19 @@ class Player(pygame.sprite.Sprite):
 		if self.flip == 0:
 			self.image = pygame.transform.flip(self.image, True, False)
 		
-		self.image = pygame.transform.scale(self.image, (78-20,103-26))
+		self.image = pygame.transform.scale(self.image, (78-25,103-30)) #(78-20,103-26)) 
+		self.image = self.colorchanger(self.image, color)
+
+	def colorchanger(self, surface, color):
+		"""Fill all pixels of the surface with color, preserve transparency."""
+		surface = surface.convert_alpha()
+		w, h = surface.get_size()
+		r, g, b = color
+		for x in range(w):
+			for y in range(h):
+				if surface.get_at((x,y)) == (255, 0, 0, 255):
+					surface.set_at((x, y), pygame.Color(r, g, b, 255))
+		return surface
 
 
 

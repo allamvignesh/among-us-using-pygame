@@ -286,7 +286,7 @@ class Tasks():
 				down = 0
 			if down == 0:
 				uplDon += 1 #360, 636
-				if Download != 1:
+				if Download != 0:
 					screen.blit(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(man)}.png"), (360+speed,191))
 				else:
 					screen.blit(pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(man)}.png"), True, False), (636-speed,191))
@@ -342,7 +342,7 @@ class Tasks():
 				down = 0
 			if down == 0:
 				uplDon += 1 #360, 636
-				if Download != 1:
+				if Download != 0:
 					screen.blit(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(man)}.png"), (360+speed,191))
 				else:
 					screen.blit(pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(man)}.png"), True, False), (636-speed,191))

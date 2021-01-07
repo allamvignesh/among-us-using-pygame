@@ -14,7 +14,7 @@ def getPowerTo():
 	return [[24, random.choice(powerTo)]]
 
 def getDownload():
-	return [[38, random.choice(dowloadable)]]
+	return [[random.choice(dowloadable), 38]]
 
 def getChoice():
 	x = random.choice([0, 1, 2])
@@ -27,7 +27,7 @@ def getChoice():
 
 def getGarbage():
 	if random.choice([True, False]):
-		return [['Empty Garbage', 20, random.choice(garbage)]]
+		return [['Empty Garbage', random.choice(garbage), 20]]
 	else:
 		return [[random.choice(tasks)]]
 
