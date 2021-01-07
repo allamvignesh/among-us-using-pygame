@@ -8,7 +8,11 @@ from randomizer import getAllTasks
 from networking.client import client
 
 connect = client()
-print(connect.send((0, 0, 1, 0, (0, 0, 0), (0, 0, 0, 0, 0, 0, 0, 0, 0, 0), False)))
+
+life = eval(connect.send((0, 0, 1, 0, (0, 0, 0), False, False)))
+ownpos = eval(life[str(f"b'{connect.name}'")])[-2]
+imposter = eval(life[str(f"b'{connect.name}'")])[6]
+
 My_color = eval(input('Enter ur color: '))
 pygame.init()
 
@@ -264,8 +268,6 @@ but = [tasks, report, sabotage, vent, kill]
 mous_grp = pygame.sprite.Group()
 mous_grp.add(mousebut)
 
-imposter = False
-
 if imposter:
 	tasks.rect.x, tasks.rect.y = (0, -200)
 	#tasksoff.rect.x, tasksoff.rect.y = (0, -200)
@@ -295,7 +297,6 @@ task_group = pygame.sprite.Group()
 for i in range(len(taskmgr)):
 	task_group.add(taskmgr[i])
 
-dead_bodys = [(100, 100, 100, 100)]
 f = []
 Tasks = Tasks()
 
@@ -316,6 +317,10 @@ dead = []
 #alive player position
 Player_Pos = []
 killed_player_index = None
+DeadPlayers = []
+AmIDEAD = False
+DEADPOS = []
+other_players_group = pygame.sprite.Group()
 
 def colorchanger(surface, color):
 	"""Fill all pixels of the surface with color, preserve transparency."""
@@ -334,6 +339,7 @@ while True:
 	wall_group.draw(screen)
 	mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
 	mous_grp.draw(screen)
+	other_players_group.draw(screen)
 
 	screen.fill((0, 0, 0))
 
@@ -421,14 +427,15 @@ while True:
 
 
 	keys = pygame.key.get_pressed()
-	if keys[K_w]:
-		b += 3
-	if keys[K_a]:
-		a += 5
-	if keys[K_s]:
-		b -= 3
-	if keys[K_d]:
-		a -= 5
+	if ownpos not in DeadPlayers:
+		if keys[K_w]:
+			b += 3
+		if keys[K_a]:
+			a += 5
+		if keys[K_s]:
+			b -= 3
+		if keys[K_d]:
+			a -= 5
 
 	#weapons
 	screen.blit(bg, (0+a,0+b))
@@ -699,53 +706,6 @@ while True:
 	#buttons
 	button_group.draw(screen)
 
-	#Player Pos
-	other_players_group = pygame.sprite.Group()
-	kill_but = 0
-	for i in range(len(Player_Pos)):
-		pp = Player_Pos[i]
-		Player_Pos[i] = Sprite(100, 100)
-		Player_Pos[i].rect.center = pp[0], pp[1]
-		other_players_group.add(Player_Pos[i])
-
-	other_players_group.draw(screen)
-
-	canKill = False
-	killed_player_index = None
-
-	for i in range(len(Player_Pos)):
-		if pygame.sprite.collide_rect(player, Player_Pos[i]):
-			canKill = True
-			if pygame.sprite.collide_rect(s, kill) and pygame.mouse.get_pressed()[0]:
-				killed = Player_Pos[i].rect.x, Player_Pos[i].rect.y
-				killed_player_index = i
-				#del Player_Pos[i]
-				break
-	if canKill:
-		kill.image = killon
-	else:
-		kill.image = killoff
-
-	#dead
-	dead_grp = pygame.sprite.Group()
-	reportbut = 0
-	for i in range(len(dead)):
-		ded = dead[i]
-		dead[i] = Sprite(100, 100)
-		dead[i].rect.center = ded[0]+a, ded[1]+b
-		dead_grp.add(dead[i])
-
-	dead_grp.draw(screen)
-	for i in dead:
-		if pygame.sprite.collide_rect(player, i) == 1:
-			reportbut = 1
-	if reportbut == 1:
-		report.image = reporton
-	else:
-		report.image = reportoff
-
-	#screen.blit(kill, pygame.mouse.get_pos())
-
 	if secCam == 1:
 
 		screen.blit(secC1, (-200, 0))
@@ -855,43 +815,118 @@ while True:
 	#Multiplayer
 	Player_Pos = []
 
-	server_info = connect.send((-a, -b, player.move, player.flip, My_color, (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), imposter, killed_player_index))
+	server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, imposter, killed_player_index, DeadPlayers))
 
 
 	try:
 		server_info = eval(server_info)
-		ownpos = eval(server_info[connect.name])[-2]
-		print(ownpos)
+		#print(server_info)
+		ownpos = eval(server_info[str(f"b'{connect.name}'")])[-2]
+		#print(ownpos)
 		
 		for i in server_info:
-			print(server_info[i])
+			#print(server_info[i])
 			server_info[i] = eval(server_info[i])
+			if server_info[i][6]:
+				imposterName = i
+		#print(imposterName)
 		
 		for i in server_info:
-			if i != connect.name:
-				
-				player2 = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(server_info[i][2])}.png"), not server_info[i][3], False)
-				
-				if int(server_info[i][2]) == 1:
-					player2 = pygame.image.load('idle.png')
-				
-				player2 = pygame.transform.scale(player2, (78-25,103-30))
+			if i != str(f"b'{connect.name}'"):
+
+				if not server_info[i][5]:
+
+					font1 = pygame.font.Font('freesansbold.ttf', 10)
+					Tet = i[2:-1]
+					tet = font.render(Tet, True, (255, 255, 255))
+					tetRect = tet.get_rect()
+					screen.blit(tet, (int(server_info[i][0])+490+a, int(server_info[i][1])+265+b))
+
+					player2 = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(server_info[i][2])}.png"), not server_info[i][3], False)
+					
+					if int(server_info[i][2]) == 1:
+						player2 = pygame.image.load('idle.png')
+					
+				else:
+					player2 = pygame.image.load("images/Sprites/Death/Dead0033.png")
+
+				player2 = pygame.transform.scale(player2, (78-25,103-30))				
 				player2 = colorchanger(player2, server_info[i][4])
 				
 				screen.blit(player2, (int(server_info[i][0])+500+a, int(server_info[i][1])+275+b))
-				
+
+				'''if server_info[i][6]:
+					#print(server_info[i][7], 'player killed')'''
+			if server_info[i][7] != None:
+				dead.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
+				DEADPOS.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
+				#print((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
+				if server_info[i][7] == ownpos and not AmIDEAD:
+					print('YOU Actually died')
+					DeadPlayers.append(ownpos)
+					AmIDEAD = True
+
+			if not server_info[i][5]:
 				Player_Pos.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
-				
-				if server_info[i][6]:
-					for i in server_info[server_info[i][8]][5]:
-						if i == 1:
-							print('yes')
-			else:
+
+			'''else:
 				if server_info[i][5][server_info[i][7]] == ownpos:
-					print('dead')
+					print('dead')'''
 
 	except Exception as e:
 		print(f'{e} Happened')
+
+	#Player Pos
+	other_players_group = pygame.sprite.Group()
+	kill_but = 0
+	for i in range(len(Player_Pos)):
+		if i != ownpos:
+			pp = Player_Pos[i]
+			Player_Pos[i] = Sprite(100, 100)
+			Player_Pos[i].rect.center = pp[0], pp[1]
+			other_players_group.add(Player_Pos[i])
+
+	canKill = False
+	killed_player_index = None
+
+	for i in range(len(Player_Pos)):
+		if i != ownpos:
+			if pygame.sprite.collide_rect(player, Player_Pos[i]):
+				canKill = True
+				if pygame.sprite.collide_rect(s, kill) and pygame.mouse.get_pressed()[0]:
+					killed = Player_Pos[i].rect.x, Player_Pos[i].rect.y
+					killed_player_index = i
+					#del Player_Pos[i]
+					break
+	if canKill:
+		kill.image = killon
+	else:
+		kill.image = killoff
+
+	#dead
+	dead_grp = pygame.sprite.Group()
+	reportbut = 0
+	for i in range(len(dead)):
+		try:
+			ded = dead[i][0], dead[i][1]
+			print(ded)
+			dead[i] = Sprite(100, 100)
+			dead[i].rect.center = ded[0], ded[1]
+			#print(ded[0]+a, ded[1]+b)
+			dead_grp.add(dead[i])
+		except:
+			dead[i].rect.x, dead[i].rect.y = DEADPOS[i][0]+a, DEADPOS[i][1]+b
+			dead_grp.add(dead[i])
+			#print(dead[i].rect.center)
+
+	dead_grp.draw(screen)
+	for i in dead:
+		if pygame.sprite.collide_rect(player, i) == 1:
+			reportbut = 1
+	if reportbut == 1:
+		report.image = reporton
+	else:
+		report.image = reportoff
 
 	#wall_group.draw(screen)
 	players.update(secCam, My_color)

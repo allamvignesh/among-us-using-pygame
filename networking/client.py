@@ -11,7 +11,7 @@ class client():
 		self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		self.client.connect(self.ADDR)
 		self.name = input("Enter Name: ")
-		self.client.send(self.name.encode(self.FORMAT))
+		print(self.send(self.name.encode(self.FORMAT)))
 
 	def send(self,msg):
 		self.client.send(str(msg).encode(self.FORMAT))

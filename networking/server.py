@@ -18,13 +18,20 @@ def handle_client(conn, addr, name='supper'):
     #player_pos contains the position of each user
     player_pos[name] = (0,0)
     player_index = len(player_pos)-1
+    msg = conn.recv(2048).decode(FORMAT)
+    player_pos[name] = eval(msg)
+    if player_index == 0:
+        player_pos[name] = player_pos[name][:-1] + (True, )
+    player_pos[name] = str(player_pos[name])
+    conn.send(str(player_pos).encode(FORMAT))
+
     connected = True
 
     while connected:
         
         #disconnect properly only if disconnect message comes
         msg = conn.recv(2048).decode(FORMAT)
-        print(player_pos)
+        #print(player_pos)
         if 'disconnect' in msg.lower():
             connected = False
         else:        
