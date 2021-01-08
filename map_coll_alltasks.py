@@ -278,6 +278,7 @@ while True:
 	wall_group.draw(screen)
 	mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
 	mous_grp.draw(screen)
+	task_group.draw(screen)
 
 	screen.fill((0, 0, 0))
 
@@ -511,10 +512,16 @@ while True:
 	screen.blit(rec3, (-1483+a, 1187+b))
 
 	#cams
-	screen.blit(cam_off, (-15+a, 385+b))
-	screen.blit(cam_off, (-790+a, 927+b))
-	screen.blit(cam_off, (577+a, 1076+b))
-	screen.blit(cam_off, (1652+a, 878+b))
+	if secCam == 0:
+		screen.blit(cam_off, (-15+a, 385+b))
+		screen.blit(cam_off, (-790+a, 927+b))
+		screen.blit(cam_off, (577+a, 1076+b))
+		screen.blit(cam_off, (1652+a, 878+b))
+	else:
+		screen.blit(cam_on, (-15+a, 385+b))
+		screen.blit(cam_on, (-790+a, 927+b))
+		screen.blit(cam_on, (577+a, 1076+b))
+		screen.blit(cam_on, (1652+a, 878+b))
 
 	#collision
 	for i in range(len(collision)):
@@ -535,7 +542,6 @@ while True:
 	s = pygame.surface.Surface([10, 10])
 	screen.blit(s, pygame.mouse.get_pos())
 	security.rect.x, security.rect.y = 0, -200
-	task_group.draw(screen)
 
 	for i in range(len(taskmgr)):
 		taskmgr[i].rect.x, taskmgr[i].rect.y = tskpos[i][0]+a, tskpos[i][1]+b
@@ -560,7 +566,7 @@ while True:
 		tasks.image = taskson
 
 	#dead
-	dead = [(20, 100)]
+	dead = []
 	dead_grp = pygame.sprite.Group()
 	reportbut = 0
 	for i in range(len(dead)):

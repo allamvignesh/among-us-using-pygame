@@ -13,7 +13,7 @@ close = pygame.image.load("models/buttons/close.png")
 class Tasks():
 	def __init__(self):
 		self.tasks = [0 for i in range(20)]
-		self.tasks = [1 for i in range(20)]
+		self.tasks = [1 for i in range(22)]
 		#print(self.tasks)
 	
 	def blitRotate(self, surf, image, pos, originPos, angle):
@@ -1165,9 +1165,117 @@ class Tasks():
 			pygame.display.update()
 			clock.tick(fps)
 
+	def electrical(self):
+		e1 = pygame.image.load("models/sabotages/e1.png")
+		e2 = pygame.image.load("models/sabotages/e2.png")
+		e3 = pygame.image.load("models/sabotages/e3.png")
+
+		on = [0, 0, 0, 0, 0]
+
+		while True:
+			screen.fill(0)
+
+			screen.blit(close, (100, 25))
+
+			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
+				return 0
+
+			screen.blit(e1, (310, 75))
+			for i in range(len(on)):	
+				if on[i] == 0:
+					screen.blit(e2, (334+80*i, 373)) #334, 373, 414, 373, 334, 356
+				else:
+					screen.blit(e3, (334+80*i, 356))
+
+			if sum(on) == 5:
+				return 1
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					self.tasks[20] = 0
+					return 0
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					print(pygame.mouse.get_pos())
+					for i in range(len(on)):
+						if 334+80*i < pygame.mouse.get_pos()[0] < 359+80*i and 373 < pygame.mouse.get_pos()[1] < 473:
+							if on[i] == 0:
+								on[i] = 1
+
+			pygame.display.update()
+			clock.tick(fps)
+
+	def oxygen(self):
+
+		o2 = pygame.image.load("models/sabotages/o2.png")
+		o2 = pygame.transform.scale(o2, (360, 500))
+		num = ''
+		resul = random.randint(10000, 99999)
+
+		font_size = 48
+		font = pygame.font.Font('freesansbold.ttf', font_size)
+		Text1 = str(resul)
+		text1 = font.render(Text1, True, (255, 255, 0))
+		textRect1 = text1.get_rect()
+
+		while True:
+
+			screen.fill(0)
+
+			screen.blit(o2, (261, 29))
+			screen.blit(text1, (711, 241))
+
+			Text2 = num
+			text2 = font.render(Text2, True, (0, 255, 0))
+			textRect2 = text2.get_rect()
+
+			screen.blit(text2, (373, 75))
+
+			screen.blit(close, (100, 25))
+
+			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
+				return 0
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					self.tasks[21] = 0
+					return 0
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					print(pygame.mouse.get_pos())
+					if len(num) < 5:
+						if 318 < pygame.mouse.get_pos()[0] < 392 and 155 < pygame.mouse.get_pos()[1] < 229:
+							num += '1'
+						if 404 < pygame.mouse.get_pos()[0] < 480 and 153 < pygame.mouse.get_pos()[1] < 231:
+							num += '2'
+						if 491 < pygame.mouse.get_pos()[0] < 568 and 155 < pygame.mouse.get_pos()[1] < 229:
+							num += '3'
+						if 318 < pygame.mouse.get_pos()[0] < 392 and 243 < pygame.mouse.get_pos()[1] < 318:
+							num += '4'
+						if 403 < pygame.mouse.get_pos()[0] < 480 and 243 < pygame.mouse.get_pos()[1] < 318:
+							num += '5'
+						if 491 < pygame.mouse.get_pos()[0] < 568 and 243 < pygame.mouse.get_pos()[1] < 318:
+							num += '6'
+						if 318 < pygame.mouse.get_pos()[0] < 392 and 336 < pygame.mouse.get_pos()[1] < 409:
+							num += '7'
+						if 403 < pygame.mouse.get_pos()[0] < 480 and 336 < pygame.mouse.get_pos()[1] < 409:
+							num += '8'
+						if 491 < pygame.mouse.get_pos()[0] < 568 and 336 < pygame.mouse.get_pos()[1] < 409:
+							num += '9'
+						if 405 < pygame.mouse.get_pos()[0] < 478 and 425 < pygame.mouse.get_pos()[1] < 500:
+							num += '0'
+					if 318 < pygame.mouse.get_pos()[0] < 392 and 425 < pygame.mouse.get_pos()[1] < 500:
+						num = num[:-1]
+					if 491 < pygame.mouse.get_pos()[0] < 568 and 425 < pygame.mouse.get_pos()[1] < 500:
+						if num == str(resul):
+							return 1
+						else:
+							num = ''
+
+			pygame.display.update()
+			clock.tick(fps)
+
 
 if __name__ == '__main__':
-	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 	#Task = [0 for i in range(20)]
 	ta = Tasks()
 
@@ -1217,6 +1325,10 @@ if __name__ == '__main__':
 			Task[18] = ta.acceptPower()
 		elif Task[19] == 0:
 			Task[19] = ta.medbayScan()
+		elif Task[20] == 0:
+			Task[20] = ta.electrical()
+		elif Task[21] == 0:
+			Task[21] = ta.oxygen()
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:

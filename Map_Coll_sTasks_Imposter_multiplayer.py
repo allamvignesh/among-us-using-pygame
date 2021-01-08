@@ -59,6 +59,7 @@ cam_off = pygame.image.load("models/map parts/cam-off.png")
 redirect = pygame.image.load("models/map parts/redirect.png")
 electric = pygame.image.load("models/map parts/electric.png")
 upload = pygame.image.load("models/map parts/weapons/upload.png")
+vent_pic = pygame.image.load("models/map parts/vent.png")
 
 #cafeteria
 bg = pygame.image.load('models/map parts/PC Computer - Among Us - Skeld Cafeteria.png')
@@ -270,6 +271,7 @@ mous_grp.add(mousebut)
 
 if imposter:
 	tasks.rect.x, tasks.rect.y = (0, -200)
+	vent.rect.x, vent.rect.y = 0, -200
 	#tasksoff.rect.x, tasksoff.rect.y = (0, -200)
 else:
 	sabotage.rect.x, sabotage.rect.y = 0, -200
@@ -321,6 +323,9 @@ DeadPlayers = []
 AmIDEAD = False
 DEADPOS = []
 other_players_group = pygame.sprite.Group()
+in_vent = False
+near_vent = False
+in_vent_time = 0
 
 def colorchanger(surface, color):
 	"""Fill all pixels of the surface with color, preserve transparency."""
@@ -360,13 +365,17 @@ while True:
 			##print('\n\n', tskpos)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
 			#print(a, b)
 
 			#print(a, b)
 
 			f.append(pygame.mouse.get_pos())
+
+			if vent.rect.colliderect(mousebut.rect):
+				in_vent = not in_vent
+
 
 			#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
@@ -427,7 +436,7 @@ while True:
 
 
 	keys = pygame.key.get_pressed()
-	if ownpos not in DeadPlayers:
+	if ownpos not in DeadPlayers and not in_vent:
 		if keys[K_w]:
 			b += 3
 		if keys[K_a]:
@@ -599,6 +608,36 @@ while True:
 	screen.blit(cam_off, (-790+a, 927+b))
 	screen.blit(cam_off, (577+a, 1076+b))
 	screen.blit(cam_off, (1652+a, 878+b))
+
+	#vent
+	near_vent = False
+	vent_pos = [(-360, 955), (-530, 1130), (-292, 1241), (-1334, 797), (-766, 349),
+				(-1233, 1166), (-765, 1689), (1290, 1770), (1870, 1094), (1269, 279),
+				(1869, 833), (833, 543), (743, 1380)]
+	vent_rect = [vent_pic.get_rect() for i in vent_pos]
+	for i in range(len(vent_rect)):
+		vent_rect[i].x, vent_rect[i].y = vent_pos[i][0]+a, vent_pos[i][1]+b
+		if vent_rect[i].colliderect(player.rect) and imposter:
+			near_vent = True
+
+	if near_vent:
+		sabotage.rect.x, sabotage.rect.y = 0, -200
+		vent.rect.x, vent.rect.y = 897, 446
+	else:
+		in_vent = False
+		vent.rect.x, vent.rect.y = 0, -200
+		sabotage.rect.x, sabotage.rect.y = 897, 446
+	
+	p = 0
+	
+	for i in vent_rect:
+		if i.colliderect(player.rect):
+			print(p)
+		p += 1
+
+	for i in vent_pos:
+		screen.blit(vent_pic, (i[0]+a, i[1]+b))
+	#screen.blit(vent_pic, pygame.mouse.get_pos())
 
 	#collision
 	for i in range(len(collision)):
@@ -815,7 +854,7 @@ while True:
 	#Multiplayer
 	Player_Pos = []
 
-	server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, imposter, killed_player_index, DeadPlayers))
+	server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, imposter, killed_player_index, DeadPlayers, in_vent))
 
 
 	try:
@@ -836,33 +875,34 @@ while True:
 
 				if not server_info[i][5]:
 
-					font1 = pygame.font.Font('freesansbold.ttf', 10)
-					Tet = i[2:-1]
-					tet = font.render(Tet, True, (255, 255, 255))
-					tetRect = tet.get_rect()
-					screen.blit(tet, (int(server_info[i][0])+490+a, int(server_info[i][1])+265+b))
+					if not server_info[i][9]:
 
-					player2 = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(server_info[i][2])}.png"), not server_info[i][3], False)
-					
-					if int(server_info[i][2]) == 1:
-						player2 = pygame.image.load('idle.png')
+						font1 = pygame.font.Font('freesansbold.ttf', 10)
+						Tet = i[2:-1]
+						tet = font.render(Tet, True, (255, 255, 255))
+						tetRect = tet.get_rect()
+						screen.blit(tet, (int(server_info[i][0])+490+a, int(server_info[i][1])+265+b))
+
+						player2 = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(server_info[i][2])}.png"), not server_info[i][3], False)
+						
+						if int(server_info[i][2]) == 1:
+							player2 = pygame.image.load('idle.png')
 					
 				else:
 					player2 = pygame.image.load("images/Sprites/Death/Dead0033.png")
 
-				player2 = pygame.transform.scale(player2, (78-25,103-30))				
-				player2 = colorchanger(player2, server_info[i][4])
+				if not server_info[i][9]::
+					player2 = pygame.transform.scale(player2, (78-25,103-30))				
+					player2 = colorchanger(player2, server_info[i][4])
 				
-				screen.blit(player2, (int(server_info[i][0])+500+a, int(server_info[i][1])+275+b))
+					screen.blit(player2, (int(server_info[i][0])+500+a, int(server_info[i][1])+275+b))
 
-				'''if server_info[i][6]:
-					#print(server_info[i][7], 'player killed')'''
 			if server_info[i][7] != None:
 				dead.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 				DEADPOS.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 				#print((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 				if server_info[i][7] == ownpos and not AmIDEAD:
-					print('YOU Actually died')
+					#print('YOU Actually died')
 					DeadPlayers.append(ownpos)
 					AmIDEAD = True
 
@@ -909,7 +949,7 @@ while True:
 	for i in range(len(dead)):
 		try:
 			ded = dead[i][0], dead[i][1]
-			print(ded)
+			#print(ded)
 			dead[i] = Sprite(100, 100)
 			dead[i].rect.center = ded[0], ded[1]
 			#print(ded[0]+a, ded[1]+b)
@@ -929,7 +969,7 @@ while True:
 		report.image = reportoff
 
 	#wall_group.draw(screen)
-	players.update(secCam, My_color)
+	players.update(secCam, My_color, in_vent)
 	s.update()
 	pygame.display.update()
 	clock.tick(fps)

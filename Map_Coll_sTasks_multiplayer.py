@@ -55,6 +55,7 @@ cam_off = pygame.image.load("models/map parts/cam-off.png")
 redirect = pygame.image.load("models/map parts/redirect.png")
 electric = pygame.image.load("models/map parts/electric.png")
 upload = pygame.image.load("models/map parts/weapons/upload.png")
+vent_pic = pygame.image.load("models/map parts/vent.png")
 
 #cafeteria
 bg = pygame.image.load('models/map parts/PC Computer - Among Us - Skeld Cafeteria.png')
@@ -354,8 +355,8 @@ while True:
 			##print('\n\n', tskpos)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
 			#print(a, b)
 
 			#print(a, b)

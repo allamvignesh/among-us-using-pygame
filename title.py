@@ -1,23 +1,37 @@
 import pygame
 from pygame.locals import *
 import random
+from free_play import Free_play
+from online import online
 
 pygame.init()
+pygame.mixer.init()
 
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
 
 clock = pygame.time.Clock()
 fps = 50
+pygame.mixer.music.load("bgs/Among Us Theme.wav") 
+
+Free_play = Free_play()
+Online = online()
 
 class Screens():
 	def __init__(self):
 
 		if self.TitleScreen():
-			self.nextScreen = self.mainScreen()
-			if self.nextScreen == 1:
-				print('online')
-
+			while True:
+				pygame.mixer.music.play() 
+				self.nextScreen = self.mainScreen()
+				if self.nextScreen == 1:
+					Online.run()
+				elif self.nextScreen == 2:
+					pygame.mixer.music.stop() 
+					Free_play.run()
+				else:
+					pygame.quit()
+					exit()
 
 	def TitleScreen(self):
 
@@ -53,6 +67,8 @@ class Screens():
 		im1 = pygame.image.load("models/titleScreen/1.png")
 		online = pygame.image.load("images/main_screen/2.png")
 		freeplay = pygame.image.load("images/main_screen/3.png")
+		hover1 = 0
+		hover2 = 0
 
 
 		online_rect = online.get_rect()
@@ -77,13 +93,27 @@ class Screens():
 
 			screen.blit(im1, (281, 74))
 			screen.blit(online, (583, 298))
-			screen.blit(freeplay, (239, 310))
+			screen.blit(freeplay, (585, 391))#(239, 310))
 
-			if 584 < pygame.mouse.get_pos()[0] < 774 and 299 < pygame.mouse.get_pos()[1] < 377 and pygame.mouse.get_pressed()[0]:
-				return 1
+			if 584 < pygame.mouse.get_pos()[0] < 774 and 299 < pygame.mouse.get_pos()[1] < 377:
+				if hover1 == 0:
+					hover1 += 1
+					pygame.mixer.Channel(0).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
+				if pygame.mouse.get_pressed()[0]:
+					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Select.wav'))
+					return 1
+			else:
+				hover1 = 0
 
-			if 238 < pygame.mouse.get_pos()[0] < 430 and 310 < pygame.mouse.get_pos()[1] < 359 and pygame.mouse.get_pressed()[0]:
-				return 2
+			if 585 < pygame.mouse.get_pos()[0] < 772 and 391 < pygame.mouse.get_pos()[1] < 438:
+				if hover2 == 0:
+					hover2 += 1
+					pygame.mixer.Channel(0).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
+				if pygame.mouse.get_pressed()[0]:
+					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Select.wav'))
+					return 2
+			else:
+				hover2 = 0
 			
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
@@ -107,4 +137,4 @@ class Screens():
 		return surface
 
 
-a = Screens()
+Screens()

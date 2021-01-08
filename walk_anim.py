@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
 		self.x = 0
 		self.y = 0
 
-	def update(self, secCam, color):
+	def update(self, secCam=0, color=(255, 0, 0), in_vent = False):
 		self.rect.x = 1000//2
 		self.rect.y = 550//2
 		keys = pygame.key.get_pressed()
@@ -51,6 +51,9 @@ class Player(pygame.sprite.Sprite):
 			self.move = 1
 		if self.flip == 0:
 			self.image = pygame.transform.flip(self.image, True, False)
+
+		if in_vent:
+			self.image = pygame.image.load('models/maps/4.png')
 		
 		self.image = pygame.transform.scale(self.image, (78-25,103-30)) #(78-20,103-26)) 
 		self.image = self.colorchanger(self.image, color)
