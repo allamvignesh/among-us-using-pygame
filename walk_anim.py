@@ -17,8 +17,9 @@ class Player(pygame.sprite.Sprite):
 		self.flip = 0
 		self.x = 0
 		self.y = 0
+		self.dead_move = 1
 
-	def update(self, secCam=0, color=(255, 0, 0), in_vent = False):
+	def update(self, secCam=0, color=(255, 0, 0), in_vent = False, Not_Alive = False):
 		self.rect.x = 1000//2
 		self.rect.y = 550//2
 		keys = pygame.key.get_pressed()
@@ -47,8 +48,14 @@ class Player(pygame.sprite.Sprite):
 			self.image = pygame.image.load(self.location)
 			self.move = 1
 			self.x, self.y = 0, 0
+
 		if self.move == 13:
 			self.move = 1
+		if Not_Alive:
+			self.dead_move += 0.5
+			if int(self.dead_move) == 49:
+				self.dead_move = 1
+			self.image = pygame.image.load(f'images/Sprites/Ghost/ghostbob{int(self.dead_move)}.png')
 		if self.flip == 0:
 			self.image = pygame.transform.flip(self.image, True, False)
 
@@ -63,10 +70,15 @@ class Player(pygame.sprite.Sprite):
 		surface = surface.convert_alpha()
 		w, h = surface.get_size()
 		r, g, b = color
+		print(surface.get_at((20, 50)))
 		for x in range(w):
 			for y in range(h):
 				if surface.get_at((x,y)) == (255, 0, 0, 255):
 					surface.set_at((x, y), pygame.Color(r, g, b, 255))
+				elif surface.get_at((x,y)) == (254, 0, 0, 127):
+					surface.set_at((x, y), pygame.Color(r, g, b, 127))
+				elif surface.get_at((x,y)) == (254, 0, 0, 126):
+					surface.set_at((x, y), pygame.Color(r, g, b, 126))
 		return surface
 
 
@@ -107,5 +119,5 @@ if __name__ == '__main__':
 		players.draw(screen)
 
 		pygame.display.update()
-		players.update(0)
+		players.update(Not_Alive = True, color = (255,255,255))
 		clock.tick(fps)

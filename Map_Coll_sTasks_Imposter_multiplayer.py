@@ -326,6 +326,8 @@ other_players_group = pygame.sprite.Group()
 in_vent = False
 near_vent = False
 in_vent_time = 0
+sabotages = ()
+dead_grp = pygame.sprite.Group()
 
 def colorchanger(surface, color):
 	"""Fill all pixels of the surface with color, preserve transparency."""
@@ -662,6 +664,7 @@ while True:
 	
 	security.rect.x, security.rect.y = 0, -200
 	task_group.draw(screen)
+	dead_grp.draw(screen)
 
 	for i in range(len(taskmgr)):
 		taskmgr[i].rect.x, taskmgr[i].rect.y = tskpos[i][0]+a, tskpos[i][1]+b
@@ -853,8 +856,9 @@ while True:
 
 	#Multiplayer
 	Player_Pos = []
+	#DeadPlayers = []
 
-	server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, imposter, killed_player_index, DeadPlayers, in_vent))
+	server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, len(oo)))
 
 
 	try:
@@ -866,7 +870,7 @@ while True:
 		for i in server_info:
 			#print(server_info[i])
 			server_info[i] = eval(server_info[i])
-			if server_info[i][6]:
+			if server_info[i][6][0]:
 				imposterName = i
 		#print(imposterName)
 		
@@ -887,11 +891,14 @@ while True:
 						
 						if int(server_info[i][2]) == 1:
 							player2 = pygame.image.load('idle.png')
+
+						if i == imposterName:
+							sabotages = server_info[i][6][1]
 					
 				else:
 					player2 = pygame.image.load("images/Sprites/Death/Dead0033.png")
 
-				if not server_info[i][9]::
+				if not server_info[i][9]:
 					player2 = pygame.transform.scale(player2, (78-25,103-30))				
 					player2 = colorchanger(player2, server_info[i][4])
 				
@@ -905,6 +912,7 @@ while True:
 					#print('YOU Actually died')
 					DeadPlayers.append(ownpos)
 					AmIDEAD = True
+				print('mot in 2st')
 
 			if not server_info[i][5]:
 				Player_Pos.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
@@ -959,7 +967,7 @@ while True:
 			dead_grp.add(dead[i])
 			#print(dead[i].rect.center)
 
-	dead_grp.draw(screen)
+	
 	for i in dead:
 		if pygame.sprite.collide_rect(player, i) == 1:
 			reportbut = 1
@@ -969,7 +977,7 @@ while True:
 		report.image = reportoff
 
 	#wall_group.draw(screen)
-	players.update(secCam, My_color, in_vent)
+	players.update(secCam, My_color, in_vent, AmIDEAD)
 	s.update()
 	pygame.display.update()
 	clock.tick(fps)
