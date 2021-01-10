@@ -13,7 +13,7 @@ server.bind(ADDR)
 player_pos = {}
 
 def handle_client(conn, addr, name='supper'):
-    print(f"[NEW CONNECTION] {addr} connected.")
+    print(f"[NEW CONNECTION] {addr} {name} connected.")
 
     #player_pos contains the position of each user
     player_pos[name] = (0,0)
@@ -35,7 +35,7 @@ def handle_client(conn, addr, name='supper'):
         if 'disconnect' in msg.lower():
             connected = False
         else:        
-            print(f"[{addr}] {msg}")
+            #print(f"[{addr}] {msg}")
             player_pos[name] = msg[:-1] + ', ' + str(player_index) +', "' + name + '")'
             conn.send(str(player_pos).encode(FORMAT))
     conn.close()

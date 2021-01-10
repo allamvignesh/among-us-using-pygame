@@ -70,7 +70,6 @@ class Player(pygame.sprite.Sprite):
 		surface = surface.convert_alpha()
 		w, h = surface.get_size()
 		r, g, b = color
-		print(surface.get_at((20, 50)))
 		for x in range(w):
 			for y in range(h):
 				if surface.get_at((x,y)) == (255, 0, 0, 255):

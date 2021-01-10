@@ -314,8 +314,8 @@ while True:
 			print(f)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
 			f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
 			for i in range(len(but)):
@@ -600,6 +600,15 @@ while True:
 	else:
 		screen.blit(low4, (-1088+a, 349+b))
 	screen.blit(rec1, (-1466+a, 824+b))
+
+	#doors pos
+	door1_pos = [(-283, 553), (-928, 1256), (-314, 1628), (425, 1230), (426, 941)]
+	door2_pos = [(1, 357), (-701, 355), (-697, 900), (91, 1668), (623, 1476), (956, 358)]
+	for i in door1_pos:
+		screen.blit(pygame.image.load("models/map parts/door1.png"), (i[0]+a, i[1]+b))
+	for i in door2_pos:
+		screen.blit(pygame.image.load("models/map parts/door2.png"), (i[0]+a, i[1]+b))
+	screen.blit(pygame.image.load("models/map parts/door1.png"), pygame.mouse.get_pos())
 
 	a, b = coll
 

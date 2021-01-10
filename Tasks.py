@@ -1195,7 +1195,6 @@ class Tasks():
 					self.tasks[20] = 0
 					return 0
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					print(pygame.mouse.get_pos())
 					for i in range(len(on)):
 						if 334+80*i < pygame.mouse.get_pos()[0] < 359+80*i and 373 < pygame.mouse.get_pos()[1] < 473:
 							if on[i] == 0:
