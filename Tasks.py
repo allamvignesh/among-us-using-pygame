@@ -952,15 +952,16 @@ class Tasks():
 
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				return 0
-			if 251 < pygame.mouse.get_pos()[0] < 730 and 34 < pygame.mouse.get_pos()[1] < 511:
-				pygame.draw.line(screen, (255, 255, 255), (pygame.mouse.get_pos()[0],34), (pygame.mouse.get_pos()[0],511), 5)
-				pygame.draw.line(screen, (255, 255, 255), (251, pygame.mouse.get_pos()[1]), (730, pygame.mouse.get_pos()[1]), 5)
-				screen.blit(ss3, (pygame.mouse.get_pos()[0]-ss3.get_size()[0]//2, pygame.mouse.get_pos()[1]-ss3.get_size()[1]//2))
+			if pygame.mouse.get_pressed()[0]:
+				if 251 < pygame.mouse.get_pos()[0] < 730 and 34 < pygame.mouse.get_pos()[1] < 511:
+					pygame.draw.line(screen, (255, 255, 255), (pygame.mouse.get_pos()[0],34), (pygame.mouse.get_pos()[0],511), 5)
+					pygame.draw.line(screen, (255, 255, 255), (251, pygame.mouse.get_pos()[1]), (730, pygame.mouse.get_pos()[1]), 5)
+					screen.blit(ss3, (pygame.mouse.get_pos()[0]-ss3.get_size()[0]//2, pygame.mouse.get_pos()[1]-ss3.get_size()[1]//2))
 
-				if 487 < pygame.mouse.get_pos()[0] < 500 and 269 < pygame.mouse.get_pos()[1] < 281:
-					if pygame.mouse.get_pressed()[0]:
-						self.tasks[15] = 1
-						return 1
+					if 487 < pygame.mouse.get_pos()[0] < 500 and 269 < pygame.mouse.get_pos()[1] < 281:
+						if pygame.mouse.get_pressed()[0]:
+							self.tasks[15] = 1
+							return 1
 			screen.blit(ss1, (241, 23))
 
 			for event in pygame.event.get():

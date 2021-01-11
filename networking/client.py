@@ -5,6 +5,7 @@ import random
 
 root = Tk()
 e = Entry(root, width=50)
+e.insert(0, "192.168.43.151")
 e.pack()
 IP = 0
 NAME = '0'

@@ -328,6 +328,13 @@ sabotages = []
 dead_grp = pygame.sprite.Group()
 sabo_on = False
 sab_fixed = False
+Emergencys = []
+
+#voting
+vs1 = pygame.image.load('models/voting/1.png')
+vs2 = pygame.image.load('models/voting/2.png')
+vs3 = pygame.image.load('models/voting/3.png')
+vs4 = pygame.image.load('models/voting/4.png')
 
 def colorchanger(surface, color):
 	"""Fill all pixels of the surface with color, preserve transparency."""
@@ -389,7 +396,7 @@ while True:
 
 			#divertTo
 
-			divert_To = {36:0, 34:1, 2:2, 15:3, 11:4, 6:5, 30:6}
+			divert_To = {36:0, 34:1, 2:2, 15:3, 11:4, 6:5, 30:6, 17:0}
 
 			for i in range(len(but)):
 				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
@@ -647,8 +654,6 @@ while True:
 	p = 0
 	
 	for i in vent_rect:
-		if i.colliderect(player.rect):
-			print(p)
 		p += 1
 
 	for i in vent_pos:
@@ -688,6 +693,7 @@ while True:
 		if pygame.sprite.collide_rect(player, taskmgr[i]) == 1:
 			todo = 1, i
 			tasksToDo = i
+			#print(i)
 			if i == 29:
 				security.rect.x, security.rect.y = 789, 444
 				if pygame.mouse.get_pressed()[0]:
@@ -695,11 +701,17 @@ while True:
 					secCam = 1
 			else:
 				security.rect.x, security.rect.y = 0, -200
+
+			if i == 48:
+				todo = 1, i
+				if sabotage.rect.colliderect(mousebut.rect) or tasks.rect.colliderect(mousebut.rect):
+					if pygame.mouse.get_pressed()[0]:
+						Emergencys.append(i)
 		else:
 			tasks.image = tasksoff
 	if len(todo) > 0:
 		##print(tasksToDo)
-		if todo[1] in oo:
+		if todo[1] in oo or todo[1] == 48:
 			tasks.image = taskson
 
 	if not AmIDEAD:
@@ -803,27 +815,41 @@ while True:
 	#DeadPlayers = []
 	sumTasks = 0
 	for i in AllTasks:
-		for j in i:
+		if len(i) != 0:
 			sumTasks += 1
 
 	if AmIDEAD:
-		server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False))
+		server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, []))
 	else:
 		MyDeadPos = a, b
-		server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed))
-
-
+		server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys))
+	
 	try:
 		server_info = eval(server_info)
 		ownpos = eval(server_info[str(f"b'{connect.name}'")])[-2]
+
+		if imposter:
+			sumTasks = 0
+		else:
+			sumTasks = 6 - sumTasks
 		
 		for i in server_info:
 			server_info[i] = eval(server_info[i])
 			if server_info[i][6][0]:
 				imposterName = i
-		
+
 		for i in server_info:
+
+			if len(server_info[i][12]) > 0:
+				if type(server_info[i][12][0]) == type("hello"):
+					print("Dead Body Found")
+				else:
+					print('Emergency Meeting')
+			
 			if i != str(f"b'{connect.name}'"):
+
+				if i != imposterName:
+					sumTasks += 6-server_info[i][10]
 
 				if not server_info[i][5]:
 
@@ -869,7 +895,11 @@ while True:
 			Player_Pos.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 
 	except Exception as e:
-		pass
+		print(e)
+
+	print(sumTasks)
+	if sumTasks == len(server_info)*6 - 6:
+		print('YEY U WOW')
 
 	#Player Pos
 	other_players_group = pygame.sprite.Group()
@@ -914,10 +944,13 @@ while True:
 	for i in dead:
 		if pygame.sprite.collide_rect(player, i) == 1:
 			reportbut = 1
+			if pygame.mouse.get_pressed()[0]:
+				Emergencys.append("report")
 	if reportbut == 1:
 		report.image = reporton
 	else:
 		report.image = reportoff
+				
 
 	if secCam != 1:
 
