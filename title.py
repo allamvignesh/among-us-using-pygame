@@ -25,7 +25,7 @@ class Screens():
 				pygame.mixer.music.play() 
 				self.nextScreen = self.mainScreen()
 				if self.nextScreen == 1:
-					Online.run()
+					import Map_Coll_sTasks_Imposter_multiplayer
 				elif self.nextScreen == 2:
 					pygame.mixer.music.stop() 
 					Free_play.run()
