@@ -1,8 +1,12 @@
 import pygame
 from pygame.locals import *
+import random
 
 class online():
 	def __init__(self):
+		pass
+
+	def run(self):
 		from walk_anim import Player
 		import pickle
 		from Tasks import Tasks
@@ -26,10 +30,147 @@ class online():
 		screen = pygame.display.set_mode(size)
 		screen.set_colorkey('#000000')
 
-		AllTasks = getAllTasks()
-
 		font_size = 18
 		font = pygame.font.Font('freesansbold.ttf', font_size)
+
+		in_lobby = True
+
+		a = 0
+		b = 0
+		c = 0
+
+		def colorchanger(surface, color):
+			"""Fill all pixels of the surface with color, preserve transparency."""
+			surface = surface.convert_alpha()
+			w, h = surface.get_size()
+			r, g, b = color
+			for x in range(w):
+				for y in range(h):
+					if surface.get_at((x,y)) == (255, 0, 0, 255):
+						surface.set_at((x, y), pygame.Color(r, g, b, 255))
+			return surface
+
+		class Sprite(pygame.sprite.Sprite):
+			def __init__(self, sizex = 10, sizey = 10, surface = 'default'):
+				pygame.sprite.Sprite.__init__(self)
+				if surface == 'default':
+					self.image = pygame.Surface((sizex, sizey))
+					self.image.fill((255, 0, 0))
+				else:
+					self.image = surface
+				self.rect = self.image.get_rect()
+
+		coll_loc = [(202, 294, 10, 341), (204, 289, 10, 10), (223, 281, 10, 10), (241, 272, 10, 10), (255, 262, 10, 10), (276, 256, 10, 10), (290, 249, 10, 10), (306, 245, 10, 10), (322, 240, 10, 10), (332, 235, 10, 10), (350, 228, 10, 10), (368, 223, 10, 10),
+					(376, 223, 214, 10), (589, 224, 10, 10), (606, 230, 10, 10), (629, 236, 10, 10), (643, 245, 10, 10), (661, 254, 10, 10), (676, 259, 10, 10), (692, 264, 10, 10), (708, 271, 10, 10), (726, 278, 10, 10), (740, 287, 10, 10), (752, 294, 10, 10), (765, 299, 10, 10),
+					(765, 303, 10, 290), (213, 613, 10, 10), (223, 628, 10, 10), (231, 642, 10, 10), (243, 652, 477, 10), (728, 645, 10, 10), (742, 631, 10, 10), (753, 616, 10, 10), (765, 601, 10, 10), (315, 310, 100, 60)]
+
+		collision = [Sprite(k, l) for i,j,k,l in coll_loc]
+		player = Player()
+		players = pygame.sprite.Group()
+		players.add(player)
+
+		wall_group = pygame.sprite.Group()
+
+		for i in range(len(collision)):
+			wall_group.add(collision[i])
+
+		lob1 = pygame.image.load("models/map parts/lobby/1.png")
+		lob2 = pygame.image.load("models/map parts/lobby/2.png")
+		lob3 = pygame.image.load("models/map parts/lobby/3.png")
+		lob4 = pygame.image.load("models/map parts/lobby/4.png")
+
+
+		while in_lobby:
+
+			wall_group.draw(screen)
+
+			screen.fill(0)
+
+			before_pos = a, b
+
+			server_info = connect.send((-a, -b, player.move, player.flip, My_color))
+
+			for i in range(len(collision)):
+				collision[i].rect.x, collision[i].rect.y = coll_loc[i][0]+a, coll_loc[i][1]+b
+
+			keys = pygame.key.get_pressed()
+			if keys[K_w]:
+				b += 3
+			if keys[K_a]:
+				a += 5
+			if keys[K_s]:
+				b -= 3
+			if keys[K_d]:
+				a -= 5
+
+			screen.blit(lob1, (-125+a, 0+b))
+			screen.blit(lob2, (153+a, 617+b))
+			screen.blit(lob3, (311+a, 279+b))
+			screen.blit(lob4, (880+a+random.random()*10, 728+b+random.random()))
+			screen.blit(pygame.transform.rotate(lob4, 25), (-104+a+random.random()*10, 702+b+random.random()))
+
+			hit = pygame.sprite.spritecollide(player, wall_group, False)
+			print(hit)
+
+			for i in collision:
+				if pygame.sprite.collide_rect(player, i):
+					if keys[pygame.K_w]:
+						if abs(player.rect.top - i.rect.bottom) < 17 and hit:
+							b = before_pos[1]
+
+					if keys[pygame.K_a]:
+						if abs(player.rect.left - i.rect.right) < 17 and hit:
+							a = before_pos[0]
+
+					if keys[pygame.K_s]:
+						if abs(player.rect.bottom - i.rect.top) < 17 and hit:
+							b = before_pos[1]
+
+					if keys[pygame.K_d]:
+						if abs(player.rect.right - i.rect.left) < 17 and hit:
+							a = before_pos[0]
+
+			try:
+				server_info = eval(server_info)
+				for i in server_info:
+					server_info[i] = eval(server_info[i])
+
+				for i in server_info:
+					if i != str(f"b'{connect.name}'"):
+						font1 = pygame.font.Font('freesansbold.ttf', 10)
+						Tet = i[2:-1]
+						tet = font.render(Tet, True, (255, 255, 255))
+						tetRect = tet.get_rect()
+						screen.blit(tet, (int(server_info[i][0])+490+a, int(server_info[i][1])+265+b))
+
+						player2 = pygame.transform.flip(pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(server_info[i][2])}.png"), not server_info[i][3], False)
+
+						if int(server_info[i][2]) == 1:
+							player2 = pygame.image.load('idle.png')
+
+						player2 = pygame.transform.scale(player2, (78-25,103-30))				
+						player2 = colorchanger(player2, server_info[i][4])
+
+						screen.blit(player2, (int(server_info[i][0])+500+a, int(server_info[i][1])+275+b))
+
+			except Exception as e:
+				pass
+			
+			players.draw(screen)
+
+			if len(server_info) == 4:
+				in_lobby = False
+
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					connect.send("disconnect")
+					return 1
+
+			players.update(color = My_color)
+			pygame.display.update()
+			clock.tick(fps)
+
+		AllTasks = getAllTasks()
 
 		Text1 = 'fixWiring '
 
@@ -211,16 +352,6 @@ class online():
 		rec2 = pygame.image.load("models/map parts/reactor/rec-2.png")
 		rec3 = pygame.image.load("models/map parts/reactor/rec-3.png")
 
-		class Sprite(pygame.sprite.Sprite):
-			def __init__(self, sizex = 10, sizey = 10, surface = 'default'):
-				pygame.sprite.Sprite.__init__(self)
-				if surface == 'default':
-					self.image = pygame.Surface((sizex, sizey))
-					self.image.fill((255, 0, 0))
-				else:
-					self.image = surface
-				self.rect = self.image.get_rect()
-
 		q = open('collision_points.dat', 'rb')
 
 		coll_loc = pickle.load(q)
@@ -356,18 +487,6 @@ class online():
 		kick_screen = False
 		amount_name = 0
 
-		def colorchanger(surface, color):
-			"""Fill all pixels of the surface with color, preserve transparency."""
-			surface = surface.convert_alpha()
-			w, h = surface.get_size()
-			r, g, b = color
-			for x in range(w):
-				for y in range(h):
-					if surface.get_at((x,y)) == (255, 0, 0, 255):
-						surface.set_at((x, y), pygame.Color(r, g, b, 255))
-			return surface
-
-		speed = 10
 		while True:
 
 			c += 1
@@ -393,17 +512,10 @@ class online():
 
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
-					pygame.quit()
 					connect.send("disconnect")
-					print(f)
-					##print('\n\n', tskpos)
-					exit()
-				if event.type == pygame.MOUSEBUTTONDOWN:
-					print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-					#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
-					#print(a, b)
+					return 1
 
-					#print(a, b)
+				if event.type == pygame.MOUSEBUTTONDOWN:
 
 					f.append(pygame.mouse.get_pos())
 
@@ -869,10 +981,6 @@ class online():
 					if len(server_info[i][12]) > 0:
 						Should_I_vote = True
 						Emergencys = server_info[i][12]
-						'''if type(server_info[i][12][0]) == type("hello"):
-							print("Dead Body Found")
-						else:
-							print('Emergency Meeting')'''
 					
 					if i != str(f"b'{connect.name}'"):
 
@@ -1204,6 +1312,7 @@ class online():
 					if server_info[max_votes[1]][6][0]:
 						connect.send('disconnect')
 						print('CrEwMaTeS WoN')
+						return 1
 					Text = font.render((max_votes[1][2:-1]+'  WAS EJECTED')[:int(amount_name)], True, (255,255,255))
 				else:
 					Text = font.render('NO ONE WAS EJECTED'[:int(amount_name)], True, (255,255,255))
@@ -1220,11 +1329,10 @@ class online():
 			if len(server_info)-len(DeadPlayers) == 2 and imposter:
 				print("Yoy U WON")
 				connect.send('disconnect')
+				return 1
 
 			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)
 			s.update()
 			pygame.display.update()
 			clock.tick(fps)
-
-online()

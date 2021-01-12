@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 import random
 from free_play import Free_play
-from online import online
+from online_muiltiplayer import online
 
 pygame.init()
 pygame.mixer.init()
@@ -15,17 +15,20 @@ fps = 50
 pygame.mixer.music.load("bgs/Among Us Theme.wav") 
 
 Free_play = Free_play()
-Online = online()
+online = online()
 
 class Screens():
 	def __init__(self):
 
 		if self.TitleScreen():
 			while True:
-				pygame.mixer.music.play() 
+				pygame.mixer.music.play(100)
 				self.nextScreen = self.mainScreen()
 				if self.nextScreen == 1:
-					import Map_Coll_sTasks_Imposter_multiplayer
+					try:
+						online.run()
+					except:
+						pass
 				elif self.nextScreen == 2:
 					pygame.mixer.music.stop() 
 					Free_play.run()
