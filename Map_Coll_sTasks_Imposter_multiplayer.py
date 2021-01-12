@@ -6,6 +6,7 @@ from Tasks import Tasks
 from threading import Thread
 from randomizer import getAllTasks
 from networking.client import client
+from voting import voting
 
 connect = client()
 
@@ -46,6 +47,12 @@ for i in range(len(AllTasks)):
 		if str(AllTasks[i][j])[0].isalpha():
 			del AllTasks[i][j]
 			break
+for i in range(len(AllTasks)):
+	if AllTasks[i][0] == 4:
+		del AllTasks[i][0]
+
+print(AllTasks)
+
 tasksToDo = None
 
 a = 0
@@ -313,6 +320,7 @@ map1 = pygame.image.load("models/maps/1.png")
 
 #deadpos
 dead = []
+adminPanel = False
 
 #alive player position
 Player_Pos = []
@@ -335,6 +343,9 @@ vs1 = pygame.image.load('models/voting/1.png')
 vs2 = pygame.image.load('models/voting/2.png')
 vs3 = pygame.image.load('models/voting/3.png')
 vs4 = pygame.image.load('models/voting/4.png')
+
+voted = None
+pressed_on = -10
 
 def colorchanger(surface, color):
 	"""Fill all pixels of the surface with color, preserve transparency."""
@@ -458,7 +469,7 @@ while True:
 
 
 	keys = pygame.key.get_pressed()
-	if not in_vent:
+	if not in_vent and not adminPanel and False:
 		if keys[K_w]:
 			b += 5
 		if keys[K_a]:
@@ -699,6 +710,10 @@ while True:
 				if pygame.mouse.get_pressed()[0]:
 					cc = a, b
 					secCam = 1
+			elif i == 39:
+				todo = 1, i
+				if pygame.mouse.get_pressed()[0]:
+					adminPanel = True
 			else:
 				security.rect.x, security.rect.y = 0, -200
 
@@ -710,7 +725,7 @@ while True:
 		else:
 			tasks.image = tasksoff
 	if len(todo) > 0:
-		##print(tasksToDo)
+		#print(tasksToDo)
 		if todo[1] in oo or todo[1] == 48:
 			tasks.image = taskson
 
@@ -811,6 +826,7 @@ while True:
 	Player_Pos = []
 	dead = []
 	DEADPOS = []
+	voting = False
 
 	#DeadPlayers = []
 	sumTasks = 0
@@ -819,10 +835,10 @@ while True:
 			sumTasks += 1
 
 	if AmIDEAD:
-		server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, []))
+		server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, [], voted))
 	else:
 		MyDeadPos = a, b
-		server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys))
+		server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys, voted))
 	
 	try:
 		server_info = eval(server_info)
@@ -841,10 +857,11 @@ while True:
 		for i in server_info:
 
 			if len(server_info[i][12]) > 0:
-				if type(server_info[i][12][0]) == type("hello"):
+				voting_screen = True
+				'''if type(server_info[i][12][0]) == type("hello"):
 					print("Dead Body Found")
 				else:
-					print('Emergency Meeting')
+					print('Emergency Meeting')'''
 			
 			if i != str(f"b'{connect.name}'"):
 
@@ -897,9 +914,10 @@ while True:
 	except Exception as e:
 		print(e)
 
-	print(sumTasks)
+	#print(sumTasks)
+
 	if sumTasks == len(server_info)*6 - 6:
-		print('YEY U WOW')
+		pass
 
 	#Player Pos
 	other_players_group = pygame.sprite.Group()
@@ -1039,7 +1057,6 @@ while True:
 			door2_pos = [(1, 357), (-701, 355), (-697, 900), (91, 1668), (623, 1476), (956, 358)]
 			
 			screen.blit(pygame.image.load("models/maps/2.png"), (0, 0))
-			screen.blit(close_doors, pygame.mouse.get_pos())
 
 			for i in door_sab_pos:
 				screen.blit(close_doors, i)
@@ -1054,9 +1071,65 @@ while True:
 			screen.blit(close, (100, 25))
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				sabo_on = False
-	
+	if adminPanel:
+		screen.blit(pygame.image.load("models/maps/8.png"), (0,0))
+		close = pygame.image.load("models/buttons/close.png")
+		for i in server_info:
+			screen.blit(pygame.image.load("models/mini.png"), ((server_info[i][0]/3657)*1000 + 500, (server_info[i][1]/2058)*550 + 60))
+		screen.blit(close, (100, 25))
+		if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
+			adminPanel = False
+		#print('adminPanel')
+
+	if True:
+		screen.blit(vs1, (77, -10))
+
+		names = list(server_info.keys())
+		totVotes = 0
+		votes = []
+
+		#print(names)
+
+		for i in range(len(server_info)):
+			try:
+				if server_info[names[i]][13] != None:
+					totVotes += 1
+					votes.append(server_info[names[i]][13])
+			except:
+				pass
+			if i <= 4:
+
+				screen.blit(vs2, (121, 100+74*i))
+				screen.blit(vs4, (128, 106+74*i))
+
+				Text = font.render(names[i], True, (0,0,0))
+				Textrect = Text.get_rect()
+				screen.blit(Text, (190, 116+74*i))
+
+				if 121 < pygame.mouse.get_pos()[0] < 121 + 346 and 100+74*i < pygame.mouse.get_pos()[1] < 160+74*i:
+					if pygame.mouse.get_pressed()[0]:
+						pressed_on = i
+
+				if voted == None:
+					screen.blit(vs3, (354, 105+74*(pressed_on)))
+
+					if 105+74*pressed_on < pygame.mouse.get_pos()[1] < 150+74*pressed_on:
+						if 355 < pygame.mouse.get_pos()[0] < 402:
+							if pygame.mouse.get_pressed()[0]:
+								voted = names[i]
+								print(voted)
+						if 410 < pygame.mouse.get_pos()[0] < 456:
+							if pygame.mouse.get_pressed()[0]:
+								pressed_on = -10
+		if totVotes == len(server_info)-len(DeadPlayers):
+			print('AllDone')
+
+
+
+
 	if len(sabotages)>0:
-		print(sabotages)
+		if c%50 == 0:
+			screen.fill((255, 0, 0))
 
 	#wall_group.draw(screen)
 	players.update(secCam, My_color, in_vent, AmIDEAD)
