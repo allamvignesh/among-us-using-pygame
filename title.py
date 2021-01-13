@@ -26,7 +26,10 @@ class Screens():
 				self.nextScreen = self.mainScreen()
 				if self.nextScreen == 1:
 					try:
-						online.run()
+						if online.run() == 0:
+							print('Lost')
+						else:
+							print('WON')
 					except:
 						pass
 				elif self.nextScreen == 2:
