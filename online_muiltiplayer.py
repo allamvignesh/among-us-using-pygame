@@ -1398,6 +1398,3 @@ class online():
 			s.update()
 			pygame.display.update()
 			clock.tick(fps)
-
-play = online()
-play.run()

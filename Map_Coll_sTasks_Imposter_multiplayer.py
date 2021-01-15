@@ -9,7 +9,6 @@ class online():
 		from threading import Thread
 		from randomizer import getAllTasks
 		from networking.client import client
-		from voting import voting
 
 		connect = client()
 
@@ -1034,7 +1033,7 @@ class online():
 
 					screen.blit(map1, (0, 0))
 
-					screen.blit(pygame.image.load("models/maps/4.png"), ((-a/3657)*1000 + 500, (-b/2058)*550 + 60))
+					screen.blit(colorchanger(pygame.image.load("models/maps/4.png"), My_color), ((-a/3657)*1000 + 500, (-b/2058)*550 + 60))
 
 					ts_im = pygame.image.load("models/maps/3.png")
 					ts_imx = pygame.image.load("models/maps/3.png").get_size()[0]//2

@@ -15,7 +15,6 @@ fps = 50
 pygame.mixer.music.load("bgs/Among Us Theme.wav") 
 
 Free_play = Free_play()
-online = online()
 
 class Screens():
 	def __init__(self):
@@ -26,10 +25,8 @@ class Screens():
 				self.nextScreen = self.mainScreen()
 				if self.nextScreen == 1:
 					try:
-						if online.run() == 0:
-							print('Lost')
-						else:
-							print('WON')
+						online = online()
+						online.run()
 					except:
 						pass
 				elif self.nextScreen == 2:
