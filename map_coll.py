@@ -308,15 +308,18 @@ while True:
 
 	before_pos = a, b
 
+	ve_nt = [[(-240, -1071), (-350, -249), (-800, -771)], []]
+
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			pygame.quit()
 			print(f)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			print(a, b)
+			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
-			f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
+			#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
 			for i in range(len(but)):
 				smashhit = pygame.sprite.collide_rect(mousebut, but[i])

@@ -671,7 +671,7 @@ class online():
 					in_vent = False
 					vent.rect.x, vent.rect.y = 0, -200
 					sabotage.rect.x, sabotage.rect.y = 897, 446
-			
+
 			p = 0
 			
 			for i in vent_rect:

@@ -13,7 +13,6 @@ class online():
 		from threading import Thread
 		from randomizer import getAllTasks
 		from networking.client import client
-		from voting import voting
 		import time
 
 		connect = client()
@@ -159,7 +158,7 @@ class online():
 			
 			players.draw(screen)
 
-			if len(server_info) == 3:
+			if len(server_info) == 4:
 				in_lobby = False
 				start = True
 				sin = 0
@@ -499,11 +498,11 @@ class online():
 		Should_I_vote = False
 		kick_screen = False
 		amount_name = 0
+		game_status = None
 
 		while True:
 
 			c += 1
-			Emergencys = []
 			sab_fixed = False
 			wall_group.draw(screen)
 			mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
@@ -854,7 +853,7 @@ class online():
 
 					if i == 48:
 						todo = 1, i
-						if sabotage.rect.colliderect(mousebut.rect) or tasks.rect.colliderect(mousebut.rect):
+						if sabotage.rect.colliderect(mousebut.rect) or tasks.rect.colliderect(mousebut.rect) and len(sabotages)==0:
 							if pygame.mouse.get_pressed()[0]:
 								Emergencys.append(i)
 				else:
@@ -970,11 +969,13 @@ class online():
 					sumTasks += 1
 
 			if AmIDEAD:
-				server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, [], voted))
+				server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, [], voted, game_status))
 			else:
 				MyDeadPos = a, b
-				server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys, voted))
-			
+				server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys, voted, game_status))
+											#0	#1	#2				#3			#4		#5			#6					#7						#8			#9		#10			#11		#12			#13		#14
+			Emergencys = []
+
 			try:
 				server_info = eval(server_info)
 				ownpos = eval(server_info[str(f"b'{connect.name}'")])[-2]
@@ -988,14 +989,29 @@ class online():
 					server_info[i] = eval(server_info[i])
 					if server_info[i][6][0]:
 						imposterName = i
-						print(server_info[i])
+						#print(server_info[i])
 
 				for i in server_info:
-					if str(server_info[i]) == 'lost':
-						print(server_info[i])
-						return 0
-					elif str(server_info[i]) == 'Won':
-						print(server_info[i])
+					if server_info[i][14] != None:
+
+						uwon = None
+						if server_info[i][14]:
+							uwon = 'won'
+							if imposter:
+								uwon = 'lost'
+						else:
+							uwon = 'lost'
+							if imposter:
+								uwon = 'won'
+
+						status = 0
+						while status != 500:
+							status += 1
+							screen.blit(pygame.image.load(f'images/{uwon}.png'), (0,0))
+							pygame.display.update()
+							clock.tick(fps)
+						connect.send("disconnect")
+						print(uwon)
 						return 1
 
 					if len(server_info[i][12]) > 0:
@@ -1076,10 +1092,9 @@ class online():
 			##print(sumTasks)
 
 			if sumTasks == len(server_info)*6 - 6:
-				connect.send('Won')
 				time.sleep(5)
 				#connect.send("disconnect")
-				return 1
+				game_status = True
 
 			#Player Pos
 			other_players_group = pygame.sprite.Group()
@@ -1124,7 +1139,7 @@ class online():
 			for i in dead:
 				if pygame.sprite.collide_rect(player, i) == 1:
 					reportbut = 1
-					if pygame.mouse.get_pressed()[0]:
+					if pygame.mouse.get_pressed()[0] and report.rect.colliderect(mousebut.rect):
 						Emergencys.append("report")
 			if reportbut == 1:
 				report.image = reporton
@@ -1244,6 +1259,7 @@ class online():
 				##print('adminPanel')
 
 			if Should_I_vote:
+				Emergencys = []
 				screen.blit(vs1, (77, -10))
 
 				names = list(server_info.keys())
@@ -1256,7 +1272,10 @@ class online():
 					if i <= 4:
 
 						screen.blit(vs2, (121, 100+74*i))
-						screen.blit(colorchanger(vs4, server_info[names[i]][4]), (128, 106+74*i))
+						try:
+							screen.blit(colorchanger(vs4, server_info[names[i]][4]), (128, 106+74*i))
+						except:
+							print(server_info[names[i]][4])
 
 						Text = font.render(names[i], True, (0,0,0))
 						Textrect = Text.get_rect()
@@ -1286,6 +1305,8 @@ class online():
 								if 410 < pygame.mouse.get_pos()[0] < 456:
 									if pygame.mouse.get_pressed()[0]:
 										pressed_on = -10
+						else:
+							screen.blit(pygame.image.load("models/voting/7.png"), (110, 22))
 
 					else:
 						screen.blit(vs2, (491, 100+74*(i-5)))
@@ -1353,11 +1374,8 @@ class online():
 				a, b = 0, 0
 				if not Tie:
 					if server_info[max_votes[1]][6][0]:
-						connect.send('Won')
 						time.sleep(5)
-						#connect.send('disconnect')
-						#print('CrEwMaTeS WoN')
-						return 1
+						game_status = True
 					Text = font.render((max_votes[1][2:-1]+'  WAS EJECTED')[:int(amount_name)], True, (255,255,255))
 				else:
 					Text = font.render('NO ONE WAS EJECTED'[:int(amount_name)], True, (255,255,255))
@@ -1372,14 +1390,14 @@ class online():
 					screen.fill((255, 0, 0))
 
 			if len(server_info)-len(DeadPlayers) == 2 and imposter:
-				#print("Yoy U WON")
-				connect.send('lost')
 				time.sleep(5)
-				#connect.send('disconnect')
-				return 0
+				game_status = False
 
 			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)
 			s.update()
 			pygame.display.update()
 			clock.tick(fps)
+
+play = online()
+play.run()

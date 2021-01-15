@@ -10,8 +10,8 @@ size =[1000, 550]
 screen = pygame.display.set_mode(size)
 
 class voting():
-	def __init__(self, connect):
-		self.a = connect.send((0, 0, 1, True, connect.color, False, (False, []), None, [], False, 5, False, [], ['Emer']))
+	def __init__(self, connect = 1):
+		#self.a = connect.send((0, 0, 1, True, connect.color, False, (False, []), None, [], False, 5, False, [], ['Emer']))
 		self.votingscreen(connect)
 
 	def votingscreen(self, connect):
@@ -26,17 +26,19 @@ class voting():
 		font = pygame.font.Font('freesansbold.ttf', 20)
 
 		while True:
-			self.a = connect.send((0, 0, 1, True, (0,0,0), False, (False, []), None, [], False, 0, False, [], voted))
-			self.a = eval(self.a)
-			for i in self.a:
-				self.a[i] = eval(self.a[i])
+			"""self.a = connect.send((0, 0, 1, True, (0,0,0), False, (False, []), None, [], False, 0, False, [], voted))
+												self.a = eval(self.a)
+												for i in self.a:
+													self.a[i] = eval(self.a[i])"""
 
 			screen.fill(0)
 
 			screen.blit(vs1, (77, -10))
+			screen.blit(pygame.image.load('models/voting/7.png'), pygame.mouse.get_pos())
 
 			z = -1
-			for i in self.a:
+			for i in range(10):
+				i = str(i)
 
 				z += 1
 
@@ -81,3 +83,5 @@ class voting():
 
 			pygame.display.update()
 			clock.tick(fps)
+
+voting()
