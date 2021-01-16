@@ -25,9 +25,9 @@ class Screens():
 				self.nextScreen = self.mainScreen()
 				if self.nextScreen == 1:
 					try:
-						online = online()
-						online.run()
+						online().run()
 					except:
+						print('1')
 						pass
 				elif self.nextScreen == 2:
 					pygame.mixer.music.stop() 

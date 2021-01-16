@@ -1305,8 +1305,6 @@ class online():
 								if 410 < pygame.mouse.get_pos()[0] < 456:
 									if pygame.mouse.get_pressed()[0]:
 										pressed_on = -10
-						else:
-							screen.blit(pygame.image.load("models/voting/7.png"), (110, 22))
 
 					else:
 						screen.blit(vs2, (491, 100+74*(i-5)))
@@ -1340,6 +1338,9 @@ class online():
 								if 410 < pygame.mouse.get_pos()[0] < 456:
 									if pygame.mouse.get_pressed()[0]:
 										pressed_on = -10
+
+				if AmIDEAD:
+					screen.blit(pygame.image.load("models/voting/7.png"), (110, 22))
 				if totVotes == len(server_info)-len(DeadPlayers):
 					#print(connect.name, 'Voted for', server_info[str("b'"+connect.name+"'")][13])
 					Should_I_vote = False
