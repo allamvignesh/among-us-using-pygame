@@ -1091,11 +1091,6 @@ class online():
 
 			##print(sumTasks)
 
-			if sumTasks == len(server_info)*6 - 6:
-				time.sleep(5)
-				#connect.send("disconnect")
-				game_status = True
-
 			#Player Pos
 			other_players_group = pygame.sprite.Group()
 			kill_but = 0
@@ -1393,6 +1388,12 @@ class online():
 			if len(server_info)-len(DeadPlayers) == 2 and imposter:
 				time.sleep(5)
 				game_status = False
+
+			if sumTasks == len(server_info)*6 - 6:
+				time.sleep(5)
+				game_status = True
+			else:
+				pygame.draw.rect(screen, (10, 10, 10, 10))
 
 			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)

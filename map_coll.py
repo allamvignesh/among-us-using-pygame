@@ -12,6 +12,7 @@ screen = pygame.display.set_mode(size)
 a = 0
 b = 0
 c = 0
+totTasks = 0
 
 cam_on = pygame.image.load("models/map parts/cam-on.png")
 cam_off = pygame.image.load("models/map parts/cam-off.png")
@@ -611,7 +612,6 @@ while True:
 		screen.blit(pygame.image.load("models/map parts/door1.png"), (i[0]+a, i[1]+b))
 	for i in door2_pos:
 		screen.blit(pygame.image.load("models/map parts/door2.png"), (i[0]+a, i[1]+b))
-	screen.blit(pygame.image.load("models/map parts/door1.png"), pygame.mouse.get_pos())
 
 	a, b = coll
 
@@ -619,6 +619,14 @@ while True:
 	button_group.draw(screen)
 
 	#screen.blit(kill, pygame.mouse.get_pos())
+
+	totTasks += 1
+	if totTasks>4*6 - 6:
+		totTasks = 1
+
+	pygame.draw.rect(screen, (0, 255, 0), (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], totTasks*10, 30))
+	for i in range(2,6):
+		pygame.draw.rect(screen, (255, 255, 255), (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], (i*6 - 6)*10, 30), 5)
 
 	#wall_group.draw(screen)
 	players.update()
