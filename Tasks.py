@@ -1276,7 +1276,7 @@ class Tasks():
 
 if __name__ == '__main__':
 	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-	#Task = [0 for i in range(20)]
+	#Task = [0 for i in range(21)]
 	ta = Tasks()
 
 	while True:

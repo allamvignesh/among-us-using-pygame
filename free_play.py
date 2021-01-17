@@ -696,3 +696,6 @@ class Free_play():
 			players.update(secCam)
 			pygame.display.update()
 			clock.tick(fps)
+
+if __name__ == '__main__':
+	Free_play().run()

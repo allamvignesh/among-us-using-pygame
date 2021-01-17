@@ -1393,7 +1393,7 @@ class online():
 				time.sleep(5)
 				game_status = True
 			else:
-				pygame.draw.rect(screen, (10, 10, 10, 10))
+				pygame.draw.rect(screen, (255, 255, 255), (10, 10, 10, 10))
 
 			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)
