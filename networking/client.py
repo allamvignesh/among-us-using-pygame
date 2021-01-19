@@ -59,7 +59,7 @@ class client():
 			self.name = NAME
 			root.mainloop()
 
-		self.color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+		self.color = random.choice([(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 128, 0), (0, 0, 0), (255, 255, 255), (255, 0, 255), (0, 255, 255), (102, 51, 0), (0, 204, 0)])
 
 
 

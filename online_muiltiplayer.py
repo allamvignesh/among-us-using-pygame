@@ -1393,10 +1393,15 @@ class online():
 				time.sleep(5)
 				game_status = True
 			else:
-				pygame.draw.rect(screen, (255, 255, 255), (10, 10, 10, 10))
+				pygame.draw.rect(screen, (0, 255, 0), (16, 19, sumTasks*10, 30))
+				for i in range(len(server_info)):
+					pygame.draw.rect(screen, (255, 255, 255), (16, 19, ((i+1)*6)*10, 30), 5)
 
 			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)
 			s.update()
 			pygame.display.update()
 			clock.tick(fps)
+
+if __name__ == '__main__':
+	online().run()

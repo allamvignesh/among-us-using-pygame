@@ -317,8 +317,8 @@ while True:
 			print(f)
 			exit()
 		if event.type == pygame.MOUSEBUTTONDOWN:
-			print(a, b)
-			#print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			#print(a, b)
+			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
 			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
 			#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
@@ -620,13 +620,15 @@ while True:
 
 	#screen.blit(kill, pygame.mouse.get_pos())
 
-	totTasks += 1
-	if totTasks>4*6 - 6:
+	num_players = 5
+
+	totTasks += 0.1
+	if totTasks>(num_players+1)*6 - 6:
 		totTasks = 1
 
-	pygame.draw.rect(screen, (0, 255, 0), (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], totTasks*10, 30))
-	for i in range(2,6):
-		pygame.draw.rect(screen, (255, 255, 255), (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], (i*6 - 6)*10, 30), 5)
+	pygame.draw.rect(screen, (0, 255, 0), (16, 19, totTasks*10, 30))
+	for i in range(num_players):
+		pygame.draw.rect(screen, (255, 255, 255), (16, 19, ((i+1)*6)*10, 30), 5)
 
 	#wall_group.draw(screen)
 	players.update()
