@@ -356,7 +356,7 @@ while True:
 	screen.blit(o23, (1090+a, 806+b))
 	if c%2 == 0:
 		screen.blit(o26, (891+a, 777+b))
-	elif c%3 == 0:
+	else:
 		screen.blit(o27, (891+a, 777+b))
 	screen.blit(oredirect, (1229+a, 771+b))
 
