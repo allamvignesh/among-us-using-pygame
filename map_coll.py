@@ -299,43 +299,7 @@ for i in range(len(taskmgr)):
 dead_bodys = [(100, 100, 100, 100)]
 f = []
 
-while True:
-	c += 1
-	wall_group.draw(screen)
-	mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
-	mous_grp.draw(screen)
-
-	screen.fill((0, 0, 0))
-
-	before_pos = a, b
-
-	ve_nt = [[(-240, -1071), (-350, -249), (-800, -771)], []]
-
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-			print(f)
-			exit()
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			#print(a, b)
-			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
-			#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
-
-			for i in range(len(but)):
-				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
-				if smashhit and pygame.mouse.get_pressed()[0]:
-					print(i)
-	keys = pygame.key.get_pressed()
-	if keys[K_w]:
-		b += 3
-	if keys[K_a]:
-		a += 5
-	if keys[K_s]:
-		b -= 3
-	if keys[K_d]:
-		a -= 5
-
+def Draw_Map():
 	#weapons
 	screen.blit(bg, (0+a,0+b))
 	screen.blit(weapons1, (1100+a, 260+b))
@@ -498,6 +462,45 @@ while True:
 	screen.blit(cam_off, (-790+a, 927+b))
 	screen.blit(cam_off, (577+a, 1076+b))
 	screen.blit(cam_off, (1652+a, 878+b))
+
+while True:
+	c += 1
+	wall_group.draw(screen)
+	mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
+	mous_grp.draw(screen)
+
+	screen.fill((0, 0, 0))
+
+	before_pos = a, b
+
+	ve_nt = [[(-240, -1071), (-350, -249), (-800, -771)], []]
+
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			pygame.quit()
+			print(f)
+			exit()
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			#print(a, b)
+			print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+			#print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
+			#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
+
+			for i in range(len(but)):
+				smashhit = pygame.sprite.collide_rect(mousebut, but[i])
+				if smashhit and pygame.mouse.get_pressed()[0]:
+					print(i)
+	keys = pygame.key.get_pressed()
+	if keys[K_w]:
+		b += 3
+	if keys[K_a]:
+		a += 5
+	if keys[K_s]:
+		b -= 3
+	if keys[K_d]:
+		a -= 5
+
+	Draw_Map()
 
 	#collision
 	for i in range(len(collision)):
