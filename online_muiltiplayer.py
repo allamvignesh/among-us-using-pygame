@@ -509,6 +509,8 @@ class online():
 			mousebut.rect.x, mousebut.rect.y = pygame.mouse.get_pos()
 			mous_grp.draw(screen)
 			other_players_group.draw(screen)
+			task_group.draw(screen)
+			dead_grp.draw(screen)
 
 			screen.fill((0, 0, 0))
 
@@ -830,8 +832,8 @@ class online():
 			s.rect.center = pygame.mouse.get_pos()
 			
 			security.rect.x, security.rect.y = 0, -200
-			task_group.draw(screen)
-			dead_grp.draw(screen)
+			"""task_group.draw(screen)
+												dead_grp.draw(screen)"""
 
 			for i in range(len(taskmgr)):
 				taskmgr[i].rect.x, taskmgr[i].rect.y = tskpos[i][0]+a, tskpos[i][1]+b
