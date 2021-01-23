@@ -162,6 +162,7 @@ class online():
 				in_lobby = False
 				start = True
 				sin = 0
+				pygame.mixer.Channel(5).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/Roundstart_MAIN.wav'))	
 				while start:
 					screen.fill(0)
 					sin += 1
@@ -549,6 +550,7 @@ class online():
 							if tasksToDo in ToDo and not imposter and tasksToDo in oo:
 								score = 0
 								sabsfixing = 0
+								pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Inprogress.wav'))
 								if ToDo[tasksToDo] == 0:
 									score = Tasks.swipeCard()
 								elif ToDo[tasksToDo] == 1:
@@ -597,6 +599,7 @@ class online():
 								if sabsfixing == 1:
 									sab_fixed = True
 								if score == 1:
+									pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Complete.wav'))	
 									ids = oo.index(tasksToDo)
 									del AllTasks[ids][0]
 									#print(AllTasks)
@@ -862,6 +865,8 @@ class online():
 				##print(tasksToDo)
 				if todo[1] in oo or todo[1] == 48:
 					tasks.image = taskson
+			else:
+				tasksToDo = None
 
 			if not AmIDEAD:
 				for i in collision:
@@ -1005,6 +1010,7 @@ class online():
 								uwon = 'won'
 
 						status = 0
+						pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/{uwon}.wav'))
 						while status != 500:
 							status += 1
 							screen.blit(pygame.image.load(f'images/{uwon}.png'), (0,0))
@@ -1015,6 +1021,10 @@ class online():
 						return 1
 
 					if len(server_info[i][12]) > 0:
+						if "report" in server_info[i][12]:
+							pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/report_Bobdyfound.wav'))	
+						else:
+							pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/alarm_emergencymeeting.wav'))	
 						Should_I_vote = True
 						Emergencys = server_info[i][12]
 					
@@ -1383,6 +1393,7 @@ class online():
 
 			if len(sabotages)>0:
 				if c%50 == 0:
+					pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/Alarm_sabotage.wav'))
 					screen.fill((255, 0, 0))
 
 			if len(server_info)-len(DeadPlayers) == 2 and imposter:

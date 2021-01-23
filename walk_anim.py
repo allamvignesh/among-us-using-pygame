@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import random
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, location = "images/Sprites/idle.png"):
@@ -26,6 +27,10 @@ class Player(pygame.sprite.Sprite):
 
 		if secCam == 1:
 			self.rect.bottomright = (0, 0)
+
+		if keys[K_w] or keys[K_a] or keys[K_s] or keys[K_d]:
+			if pygame.mixer.Channel(3).get_busy() == 0:
+				pygame.mixer.Channel(3).play(pygame.mixer.Sound(f'bgs/Player/Footsteps/Metal/FootstepMetal0{random.randint(1,8)}.wav'))
 		if keys[K_d]:
 			self.flip = 1
 			self.image = pygame.image.load(f"images/Sprites/Walk/walkcolor00{int(self.move)}.png")

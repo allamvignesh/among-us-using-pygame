@@ -312,6 +312,7 @@ class Free_play():
 						if smashhit and pygame.mouse.get_pressed()[0]:
 							if tasksToDo in ToDo and not imposter:
 								print(tasksToDo)
+								pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Inprogress.wav'))
 								if ToDo[tasksToDo] == 0:
 									Tasks.swipeCard()
 								elif ToDo[tasksToDo] == 1:
@@ -352,6 +353,7 @@ class Free_play():
 									Tasks.acceptPower()
 								elif ToDo[tasksToDo] == 19:
 									Tasks.medbayScan()
+								pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Complete.wav'))	
 
 			keys = pygame.key.get_pressed()
 			if keys[K_w]:
@@ -573,6 +575,8 @@ class Free_play():
 			if todo == 1:
 				##print(tasksToDo)
 				tasks.image = taskson
+			else:
+				tasksToDo = None
 
 			#dead
 			dead = []

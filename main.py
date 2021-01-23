@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import random
+import random, time
 from free_play import Free_play
 from online_muiltiplayer import online
 
@@ -9,6 +9,8 @@ pygame.mixer.init()
 
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
+pygame.display.set_icon(pygame.image.load("idle.png"))
+pygame.display.set_caption("Among US Project")
 
 clock = pygame.time.Clock()
 fps = 50
@@ -17,25 +19,33 @@ pygame.mixer.music.load("bgs/Among Us Theme.wav")
 Free_play = Free_play()
 
 Theme = pygame.mixer.Sound('bgs/Among Us Theme.wav')
+Theme.set_volume(0.5)
 pygame.mixer.Channel(0).play(Theme)
+
 
 class Screens():
 	def __init__(self):
-
 		if self.TitleScreen():
 			while True:
+
 				if pygame.mixer.Channel(0).get_busy() == 0:
 					pygame.mixer.Channel(0).play(Theme)
+
 				self.nextScreen = self.mainScreen()
+
 				if self.nextScreen == 1:
 					try:
 						online().run()
 					except:
 						pass
+
 				elif self.nextScreen == 2:
 					pygame.mixer.music.stop() 
 					Free_play.run()
+
 				else:
+					pygame.mixer.Channel(2).play(pygame.mixer.Sound('bgs/Among Us General Sounds/Panel_GenericDisappear.wav'))
+					time.sleep(0.5)
 					pygame.quit()
 					exit()
 
@@ -48,12 +58,15 @@ class Screens():
 		g = 1
 
 		while True:
+
 			b += g
 			
-			if b == 255:
+			if b == 20: #255:
 				g = -1
+
 			if b == 0:
 				return 1
+
 			screen.fill(0)
 
 			imcopy = im1.copy()
@@ -73,20 +86,19 @@ class Screens():
 		im1 = pygame.image.load("models/titleScreen/1.png")
 		online = pygame.image.load("images/main_screen/2.png")
 		freeplay = pygame.image.load("images/main_screen/3.png")
-		hover1 = 0
-		hover2 = 0
-
 
 		online_rect = online.get_rect()
 		freeplay_rect = freeplay.get_rect()
 
+		hover1 = 0
+		hover2 = 0
+
 		colors = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 128, 0), (255, 255, 255), (255, 0, 255), (0, 255, 255), (102, 51, 0), (0, 204, 0)]
-
 		plys = [self.colorchanger(pygame.image.load(f'images/main_screen/mainscreenCrew{i}.png'), random.choice(colors)) for i in range(1,7)]
-
 		bliting = [[random.choice(plys), random.randint(-500, 1000), random.randint(-100, 560)] for i in range(len(plys))]
 
 		while True:
+
 			screen.fill(0)
 
 			for i in range(len(bliting)):
@@ -94,6 +106,7 @@ class Screens():
 				if bliting[i][1] > 1000:
 					bliting[i][1] = -100
 					bliting[i][2] = random.randint(-100, 560)
+
 			for i in range(len(bliting)):
 				screen.blit(bliting[i][0], (bliting[i][1], bliting[i][2]))
 
@@ -105,6 +118,7 @@ class Screens():
 				if hover1 == 0:
 					hover1 += 1
 					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
+				
 				if pygame.mouse.get_pressed()[0]:
 					pygame.mixer.Channel(2).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Select.wav'))
 					return 1
@@ -115,6 +129,7 @@ class Screens():
 				if hover2 == 0:
 					hover2 += 1
 					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
+				
 				if pygame.mouse.get_pressed()[0]:
 					pygame.mixer.Channel(2).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Select.wav'))
 					return 2
@@ -124,6 +139,7 @@ class Screens():
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					return 0
+				
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					print(pygame.mouse.get_pos())
 			
