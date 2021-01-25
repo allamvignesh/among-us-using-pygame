@@ -928,9 +928,6 @@ class online():
 
 			a, b = coll
 
-			#buttons
-			button_group.draw(screen)
-
 			if secCam == 1:
 
 				screen.blit(secC1, (-200, 0))
@@ -1264,6 +1261,15 @@ class online():
 				if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 					adminPanel = False
 				##print('adminPanel')
+
+			view = pygame.Surface.convert_alpha(pygame.Surface([1000, 550]))
+			view.fill((0, 0, 0, 150))
+
+			for i in range(255, 0, -1):
+				pygame.draw.circle(view, (0,0,0,i), player.rect.center, i*3)
+
+			#buttons
+			button_group.draw(screen)
 
 			if Should_I_vote:
 				Emergencys = []

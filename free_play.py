@@ -657,6 +657,12 @@ class Free_play():
 			#buttons
 			button_group.draw(screen)
 
+			view = pygame.Surface.convert_alpha(pygame.Surface([1000, 550]))
+			view.fill((0, 0, 0, 150))
+
+			for i in range(255, 0, -1):
+				pygame.draw.circle(view, (0,0,0,i), player.rect.center, i*3)
+
 			#screen.blit(kill, pygame.mouse.get_pos())
 
 			if secCam == 1:
@@ -692,6 +698,7 @@ class Free_play():
 				#screen.blit(secC2, pygame.mouse.get_pos())
 
 			#wall_group.draw(screen)
+
 			close = pygame.image.load("models/buttons/close.png")
 			screen.blit(close, (0, 0))
 			if 0 < pygame.mouse.get_pos()[0] < 50 and 0 < pygame.mouse.get_pos()[1] < 50 and pygame.mouse.get_pressed()[0]:
