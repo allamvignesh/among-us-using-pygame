@@ -61,7 +61,7 @@ class Screens():
 
 			b += g
 			
-			if b == 20: #255:
+			if b == 255:
 				g = -1
 
 			if b == 0:
@@ -100,7 +100,7 @@ class Screens():
 		while True:
 
 			screen.fill(0)
-			
+
 			if pygame.mixer.Channel(0).get_busy() == 0:
 					pygame.mixer.Channel(0).play(Theme)
 
