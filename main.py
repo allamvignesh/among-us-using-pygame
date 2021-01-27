@@ -25,7 +25,7 @@ pygame.mixer.Channel(0).play(Theme)
 
 class Screens():
 	def __init__(self):
-		if self.TitleScreen():
+		if self.TitleScreen() != 0:
 			while True:
 
 				if pygame.mixer.Channel(0).get_busy() == 0:
@@ -100,6 +100,9 @@ class Screens():
 		while True:
 
 			screen.fill(0)
+			
+			if pygame.mixer.Channel(0).get_busy() == 0:
+					pygame.mixer.Channel(0).play(Theme)
 
 			for i in range(len(bliting)):
 				bliting[i][1] += 1
