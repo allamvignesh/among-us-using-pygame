@@ -642,13 +642,13 @@ while True:
 				#print((player.rect.center[1]-collision[i].rect.center[1])/(player.rect.center[0]-collision[i].rect.center[0]))
 				#print(math.degrees(math.atan((player.rect.center[1]-collision[i].rect.center[1])/(player.rect.center[0]-collision[i].rect.center[0]))))
 				#if math.degrees(math.atan((player.rect.center[1]-collision[i].rect.center[1])/(player.rect.center[0]-collision[i].rect.center[0]))) >= 0:
-				'''if collision[i].rect.center[1] < player.rect.center[1]:
+				if collision[i].rect.center[1] < player.rect.center[1]:
 					pygame.draw.line(screen, (0, 255, 0), player.rect.center, (coll_loc[i][0]+a, coll_loc[i][1]+b))
 					pygame.draw.line(screen, (0, 255, 0), player.rect.center, (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3]))
 					#visible_points_x.extend([(coll_loc[i][0]+a, coll_loc[i][1]+b), (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3])])
 				else:
 					pygame.draw.line(screen, (0, 0, 255), player.rect.center, (coll_loc[i][0]+a, coll_loc[i][1]+b))
-					pygame.draw.line(screen, (0, 0, 255), player.rect.center, (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3]))'''
+					pygame.draw.line(screen, (0, 0, 255), player.rect.center, (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3]))
 				visible_points_y.extend([(coll_loc[i][0]+a, coll_loc[i][1]+b), (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3])])
 				pygame.draw.polygon(view, (0, 255, 0, 0), (player.rect.center, (coll_loc[i][0]+a, coll_loc[i][1]+b), (coll_loc[i][0]+a+coll_loc[i][2], coll_loc[i][1]+b+coll_loc[i][3])))
 				pygame.draw.polygon(view, (0, 255, 0, 0), (player.rect.center, (coll_loc[i][0]+a, coll_loc[i][1]+b), (coll_loc[i-1][0]+a, coll_loc[i-1][1]+b)))
@@ -657,8 +657,8 @@ while True:
 			except:
 				pass
 
-	for i in range(50, 0, -1):
-		pygame.draw.circle(view, (0,0,0,i%2), player.rect.center, i*3)
+	"""for i in range(50, 0, -1):
+		pygame.draw.circle(view, (0,0,0,i%2), player.rect.center, i*3)"""
 
 
 	visible_points_x.extend(visible_points_y)

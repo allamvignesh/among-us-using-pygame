@@ -4,9 +4,9 @@ import random
 
 class Player(pygame.sprite.Sprite):
 	def __init__(self, location = "images/Sprites/idle.png"):
-		
+
 		pygame.sprite.Sprite.__init__(self)
-		
+
 		self.image = pygame.image.load(location)
 		self.image = pygame.transform.scale(self.image, (78-20,103-26))
 		self.location = location
@@ -66,8 +66,8 @@ class Player(pygame.sprite.Sprite):
 
 		if in_vent:
 			self.image = pygame.image.load('models/maps/4.png')
-		
-		self.image = pygame.transform.scale(self.image, (78-25,103-30)) #(78-20,103-26)) 
+
+		self.image = pygame.transform.scale(self.image, (78-25,103-30)) #(78-20,103-26))
 		self.image = self.colorchanger(self.image, color)
 
 	def colorchanger(self, surface, color):
@@ -123,5 +123,5 @@ if __name__ == '__main__':
 		players.draw(screen)
 
 		pygame.display.update()
-		players.update(Not_Alive = True, color = (255,255,255))
+		players.update(Not_Alive = False, color = (255,255,255))
 		clock.tick(fps)

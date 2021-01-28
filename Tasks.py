@@ -15,7 +15,7 @@ class Tasks():
 		self.tasks = [0 for i in range(20)]
 		self.tasks = [1 for i in range(22)]
 		#print(self.tasks)
-	
+
 	def blitRotate(self, surf, image, pos, originPos, angle):
 
 	    # calcaulate the axis aligned bounding box of the rotated image
@@ -25,7 +25,7 @@ class Tasks():
 	    min_box    = (min(box_rotate, key=lambda p: p[0])[0], min(box_rotate, key=lambda p: p[1])[1])
 	    max_box    = (max(box_rotate, key=lambda p: p[0])[0], max(box_rotate, key=lambda p: p[1])[1])
 
-	    # calculate the translation of the pivot 
+	    # calculate the translation of the pivot
 	    pivot        = pygame.math.Vector2(originPos[0], -originPos[1])
 	    pivot_rotate = pivot.rotate(angle)
 	    pivot_move   = pivot_rotate - pivot
@@ -38,7 +38,7 @@ class Tasks():
 
 	    # rotate and blit the image
 	    surf.blit(rotated_image, origin)
-	  
+
 	    # draw rectangle around the image
 	    #pygame.draw.rect(surf, (255, 0, 0), (*origin, *rotated_image.get_size()),2)
 
@@ -96,7 +96,7 @@ class Tasks():
 
 			if 286 < pygame.mouse.get_pos()[0] < 507 and pygame.mouse.get_pressed()[0]:
 				doing = 1
-			
+
 			if doing == 1:
 				if pygame.mouse.get_pressed()[0]:
 					if 201 < pygame.mouse.get_pos()[0] < 700 and 150 < pygame.mouse.get_pos()[1] < 250:
@@ -646,7 +646,7 @@ class Tasks():
 
 			for i in range(len(astPos)):
 				astPos[i][0] -= 5
-			
+
 			if  277 < astPos[0][0] < 660:
 				screen.blit(ast1, astPos[0])
 			if  277 < astPos[5][0] < 660:
@@ -667,7 +667,7 @@ class Tasks():
 				screen.blit(ast5, astPos[4])
 			if  277 < astPos[9][0] < 660:
 				screen.blit(ast5, astPos[9])
-			if 322 < pygame.mouse.get_pos()[0] < 674 and 92 < pygame.mouse.get_pos()[1] < 453: 
+			if 322 < pygame.mouse.get_pos()[0] < 674 and 92 < pygame.mouse.get_pos()[1] < 453:
 				if pygame.mouse.get_pressed()[0]:
 					tarPos = pygame.mouse.get_pos()
 					for i in range(len(astPos)):
@@ -799,7 +799,7 @@ class Tasks():
 
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				return 0
-			
+
 			if 413-int(en)*5 < 105:
 				self.tasks[12] = 1
 				return 1
@@ -853,7 +853,7 @@ class Tasks():
 
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				return 0
-			
+
 			if statfilling == 1:
 				for i in range(len(fills)):
 					if fills[i] == 100:
@@ -1050,7 +1050,7 @@ class Tasks():
 
 			if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 				return 0
-			
+
 			for i in range(9):
 				#screen.blit(sr5, (575+i*50, 200))
 				if i >= 6:
@@ -1182,7 +1182,7 @@ class Tasks():
 				return 0
 
 			screen.blit(e1, (310, 75))
-			for i in range(len(on)):	
+			for i in range(len(on)):
 				if on[i] == 0:
 					screen.blit(e2, (334+80*i, 373)) #334, 373, 414, 373, 334, 356
 				else:
@@ -1276,7 +1276,8 @@ class Tasks():
 
 if __name__ == '__main__':
 	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-	#Task = [0 for i in range(21)]
+	#Task = [0 for i in range(22)]
+	Task[21] = 0
 	ta = Tasks()
 
 	while True:
