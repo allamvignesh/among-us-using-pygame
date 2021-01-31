@@ -12,7 +12,7 @@ close = pygame.image.load("models/buttons/close.png")
 
 class Tasks():
 	def __init__(self):
-		pass
+		self.tasks = [0 for i in range(20)]
 
 	def blitRotate(self, surf, image, pos, originPos, angle):
 
