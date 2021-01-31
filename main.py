@@ -93,7 +93,8 @@ class Screens():
 		hover1 = 0
 		hover2 = 0
 
-		colors = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 128, 0), (255, 255, 255), (255, 0, 255), (0, 255, 255), (102, 51, 0), (0, 204, 0)]
+		colors = [(255, 0, 0), (0, 0, 255), (0, 255, 0), (255, 255, 0), (255, 128, 0), 
+				(255, 255, 255), (255, 0, 255), (0, 255, 255), (102, 51, 0), (0, 204, 0)]
 		plys = [self.colorchanger(pygame.image.load(f'images/main_screen/mainscreenCrew{i}.png'), random.choice(colors)) for i in range(1,7)]
 		bliting = [[random.choice(plys), random.randint(-500, 1000), random.randint(-100, 560)] for i in range(len(plys))]
 
@@ -117,7 +118,7 @@ class Screens():
 			screen.blit(online, (583, 298))
 			screen.blit(freeplay, (239, 298))
 
-			if 584 < pygame.mouse.get_pos()[0] < 774 and 299 < pygame.mouse.get_pos()[1] < 377:
+			if 584<pygame.mouse.get_pos()[0]<774 and 299<pygame.mouse.get_pos()[1]<377:
 				if hover1 == 0:
 					hover1 += 1
 					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
@@ -128,7 +129,7 @@ class Screens():
 			else:
 				hover1 = 0
 
-			if 239 < pygame.mouse.get_pos()[0] < 429 and 299 < pygame.mouse.get_pos()[1] < 377:
+			if 239<pygame.mouse.get_pos()[0]<429 and 299<pygame.mouse.get_pos()[1]<377:
 				if hover2 == 0:
 					hover2 += 1
 					pygame.mixer.Channel(1).play(pygame.mixer.Sound('bgs/Among Us General Sounds/UI_Hover.wav'))
@@ -142,9 +143,6 @@ class Screens():
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					return 0
-				
-				if event.type == pygame.MOUSEBUTTONDOWN:
-					print(pygame.mouse.get_pos())
 			
 			pygame.display.update()
 			clock.tick(fps)
@@ -160,6 +158,5 @@ class Screens():
 				if surface.get_at((x,y)) == (255, 255, 255, 255):
 					surface.set_at((x, y), pygame.Color(r, g, b, 255))
 		return surface
-
 
 Screens()

@@ -633,7 +633,7 @@ while True:
 	view.fill((0, 0, 0, 150))
 
 	for i in range(255, 0, -1):
-		pygame.draw.circle(view, (0,0,0,i), player.rect.center, i*3)
+		pygame.draw.circle(view, (0,0,0,i), player.rect.center, i*2)
 
 	for i in range(len(collision)):
 		#print((coll_loc[i][0]+a, coll_loc[i][1]+b))

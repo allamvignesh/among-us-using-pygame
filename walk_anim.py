@@ -11,7 +11,6 @@ class Player(pygame.sprite.Sprite):
 		self.image = pygame.transform.scale(self.image, (78-20,103-26))
 		self.location = location
 		self.rect = self.image.get_rect()
-		print(self.rect)
 
 		self.speed = 0.5
 		self.move = 1
@@ -84,44 +83,3 @@ class Player(pygame.sprite.Sprite):
 				elif surface.get_at((x,y)) == (254, 0, 0, 126):
 					surface.set_at((x, y), pygame.Color(r, g, b, 126))
 		return surface
-
-
-
-if __name__ == '__main__':
-	pygame.init()
-
-	clock = pygame.time.Clock()
-	fps = 50
-	size =[1000, 550]
-	screen = pygame.display.set_mode(size)
-
-	players = pygame.sprite.Group()
-	player = Player()
-	players.add(player)
-	bg = pygame.image.load('models/map parts/PC Computer - Among Us - Skeld Cafeteria.png')
-	bg_pos = [0,0]
-	while True:
-		screen.fill((255, 255, 255))
-
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.quit()
-				exit()
-
-		screen.blit(bg, bg_pos)
-
-		keys = pygame.key.get_pressed()
-		if keys[K_w]:
-			bg_pos[1] += 10
-		if keys[K_a]:
-			bg_pos[0] += 10
-		if keys[K_s]:
-			bg_pos[1] -= 10
-		if keys[K_d]:
-			bg_pos[0] -= 10
-
-		players.draw(screen)
-
-		pygame.display.update()
-		players.update(Not_Alive = False, color = (255,255,255))
-		clock.tick(fps)

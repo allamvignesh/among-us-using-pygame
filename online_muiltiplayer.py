@@ -48,21 +48,33 @@ class online():
 				for y in range(h):
 					if surface.get_at((x,y)) == (255, 0, 0, 255):
 						surface.set_at((x, y), pygame.Color(r, g, b, 255))
+
 			return surface
 
 		class Sprite(pygame.sprite.Sprite):
 			def __init__(self, sizex = 10, sizey = 10, surface = 'default'):
 				pygame.sprite.Sprite.__init__(self)
+
 				if surface == 'default':
 					self.image = pygame.Surface((sizex, sizey))
 					self.image.fill((255, 0, 0))
 				else:
 					self.image = surface
+
 				self.rect = self.image.get_rect()
 
-		coll_loc = [(202, 294, 10, 341), (204, 289, 10, 10), (223, 281, 10, 10), (241, 272, 10, 10), (255, 262, 10, 10), (276, 256, 10, 10), (290, 249, 10, 10), (306, 245, 10, 10), (322, 240, 10, 10), (332, 235, 10, 10), (350, 228, 10, 10), (368, 223, 10, 10),
-					(376, 223, 214, 10), (589, 224, 10, 10), (606, 230, 10, 10), (629, 236, 10, 10), (643, 245, 10, 10), (661, 254, 10, 10), (676, 259, 10, 10), (692, 264, 10, 10), (708, 271, 10, 10), (726, 278, 10, 10), (740, 287, 10, 10), (752, 294, 10, 10), (765, 299, 10, 10),
-					(765, 303, 10, 290), (213, 613, 10, 10), (223, 628, 10, 10), (231, 642, 10, 10), (243, 652, 477, 10), (728, 645, 10, 10), (742, 631, 10, 10), (753, 616, 10, 10), (765, 601, 10, 10), (315, 310, 100, 60)]
+		coll_loc = [(202, 294, 10, 341), (204, 289, 10, 10), (223, 281, 10, 10), 
+					(241, 272, 10, 10), (255, 262, 10, 10), (276, 256, 10, 10), 
+					(290, 249, 10, 10), (306, 245, 10, 10), (322, 240, 10, 10), 
+					(332, 235, 10, 10), (350, 228, 10, 10), (368, 223, 10, 10),
+					(376, 223, 214, 10), (589, 224, 10, 10), (606, 230, 10, 10), 
+					(629, 236, 10, 10), (643, 245, 10, 10), (661, 254, 10, 10), 
+					(676, 259, 10, 10), (692, 264, 10, 10), (708, 271, 10, 10), 
+					(726, 278, 10, 10), (740, 287, 10, 10), (752, 294, 10, 10), 
+					(765, 299, 10, 10), (765, 303, 10, 290), (213, 613, 10, 10), 
+					(223, 628, 10, 10), (231, 642, 10, 10), (243, 652, 477, 10), 
+					(728, 645, 10, 10), (742, 631, 10, 10), (753, 616, 10, 10), 
+					(765, 601, 10, 10), (315, 310, 100, 60)]
 
 		collision = [Sprite(k, l) for i,j,k,l in coll_loc]
 		player = Player()
@@ -91,9 +103,10 @@ class online():
 			server_info = connect.send((-a, -b, player.move, player.flip, My_color))
 
 			for i in range(len(collision)):
-				collision[i].rect.x, collision[i].rect.y = coll_loc[i][0]+a, coll_loc[i][1]+b
+				collision[i].rect.x,collision[i].rect.y=coll_loc[i][0]+a,coll_loc[i][1]+b
 
 			keys = pygame.key.get_pressed()
+
 			if keys[K_w]:
 				b += 3
 			if keys[K_a]:
@@ -110,7 +123,6 @@ class online():
 			screen.blit(pygame.transform.rotate(lob4, 25), (-104+a+random.random()*10, 702+b+random.random()))
 
 			hit = pygame.sprite.spritecollide(player, wall_group, False)
-			#print(hit)
 
 			for i in collision:
 				if pygame.sprite.collide_rect(player, i):
@@ -136,6 +148,7 @@ class online():
 					server_info[i] = eval(server_info[i])
 
 				for i in server_info:
+
 					if i != str(f"b'{connect.name}'"):
 						font1 = pygame.font.Font('freesansbold.ttf', 10)
 						Tet = i[2:-1]
@@ -192,6 +205,7 @@ class online():
 		Text3 = 'Download and Upload '
 
 		Text4 = f'{AllTasks[3][0]} '
+
 		if str(AllTasks[4][0])[0].isalpha():
 			Text5 = f'{AllTasks[4][0]} '
 		else:
@@ -207,8 +221,6 @@ class online():
 		for i in range(len(AllTasks)):
 			if AllTasks[i][0] == 4:
 				del AllTasks[i][0]
-
-		#print(AllTasks)
 
 		tasksToDo = None
 
@@ -424,23 +436,35 @@ class online():
 		if imposter:
 			tasks.rect.x, tasks.rect.y = (0, -200)
 			vent.rect.x, vent.rect.y = 0, -200
-			#tasksoff.rect.x, tasksoff.rect.y = (0, -200)
+
 		else:
 			sabotage.rect.x, sabotage.rect.y = 0, -200
 			kill.rect.x, kill.rect.y = 0, -200
 			vent.rect.x, vent.rect.y = 0, -200
 
-		tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), (920, 256, 10, 10), (841, 180, 10, 10), (117, 121, 10, 10),
-					(1260, 787, 10, 10), (1107, 817, 10, 10), (1035, 827, 10, 10), (964, 860, 10, 10), (1761, 919, 10, 10), (1878, 791, 10, 10), (1967, 776, 10, 10), (2028, 811, 10, 10), (2073, 1021, 10, 10),
-					(1409, 1422, 10, 10), (1176, 1769, 10, 10), (1056, 1760, 10, 10), (922, 1972, 10, 10), (887, 1771, 10, 10), (612, 1981, 10, 10), (254, 1724, 10, 10), (-256, 1432, 10, 10), (-266, 1201, 10, 10), (-206, 1201, 10, 10), (-111, 1201, 10, 10), (54, 1201, 10, 10),
-					(-67, 997, 10, 10), (-13, 936, 10, 10), (-518, 815, 10, 10), (-475, 833, 10, 10), (-719, 956, 10, 10), (-990, 1626, 10, 10), (-1007, 1617, 10, 10), (-978, 1330, 10, 10), (-1001, 588, 10, 10), (-917, 284, 10, 10),
-					(639, 1091, 10, 10), (738, 1072, 10, 10), (808, 1265, 10, 10), (1012, 1265, 10, 10), (1078, 1088, 10, 10), (362, 1294, 10, 10),
-					(-1316, 1020, 10, 10), (-1156, 799, 10, 10), (-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), (340, 402, 220, 150), (-1071, 610, 10, 10)]
+		tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), 
+					(920, 256, 10, 10), (841, 180, 10, 10), (117, 121, 10, 10),
+					(1260, 787, 10, 10), (1107, 817, 10, 10), (1035, 827, 10, 10), 
+					(964, 860, 10, 10), (1761, 919, 10, 10), (1878, 791, 10, 10), 
+					(1967, 776, 10, 10), (2028, 811, 10, 10), (2073, 1021, 10, 10),
+					(1409, 1422, 10, 10), (1176, 1769, 10, 10), (1056, 1760, 10, 10), 
+					(922, 1972, 10, 10), (887, 1771, 10, 10), (612, 1981, 10, 10), 
+					(254, 1724, 10, 10), (-256, 1432, 10, 10), (-266, 1201, 10, 10), 
+					(-206, 1201, 10, 10), (-111, 1201, 10, 10), (54, 1201, 10, 10),
+					(-67, 997, 10, 10), (-13, 936, 10, 10), (-518, 815, 10, 10), 
+					(-475, 833, 10, 10), (-719, 956, 10, 10), (-990, 1626, 10, 10), 
+					(-1007, 1617, 10, 10), (-978, 1330, 10, 10), (-1001, 588, 10, 10), 
+					(-917, 284, 10, 10), (639, 1091, 10, 10), (738, 1072, 10, 10), 
+					(808, 1265, 10, 10), (1012, 1265, 10, 10), (1078, 1088, 10, 10), 
+					(362, 1294, 10, 10), (-1316, 1020, 10, 10), (-1156, 799, 10, 10), 
+					(-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), 
+					(340, 402, 220, 150), (-1071, 610, 10, 10)]
 
 
-		ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:15, 15:18, 16:14,
-				17:18, 19:3, 21:12, 20:2, 42:1, 23:3, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
-				31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6, 7:21, 22:20, 100:100}
+		ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 
+				14:15, 15:18, 16:14, 17:18, 19:3, 21:12, 20:2, 42:1, 23:3, 24:10, 25:1, 
+				26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 31:1, 30:18, 35:11, 36:18, 27:19, 
+				28:13, 37:1, 38:4, 40:0, 49:6, 7:21, 22:20, 100:100}
 
 		DoTo = []
 
@@ -522,6 +546,7 @@ class online():
 					oo.append(i[0])
 				else:
 					oo.append(-10)
+
 			if len(sabotages)>0:
 				oo.append(sabotages[0][0])
 
@@ -539,8 +564,6 @@ class online():
 
 					if sabotage.rect.colliderect(mousebut.rect):
 						sabo_on = not sabo_on
-
-					#f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
 
 					#divertTo
 
@@ -598,14 +621,14 @@ class online():
 										sabsfixing = Tasks.oxygen()
 									elif ToDo[sabotages[0][0]] == 20:
 										sabsfixing = Tasks.electrical()
+
 								if sabsfixing == 1:
 									sab_fixed = True
+
 								if score == 1:
 									pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Complete.wav'))	
 									ids = oo.index(tasksToDo)
 									del AllTasks[ids][0]
-									#print(AllTasks)
-
 
 			keys = pygame.key.get_pressed()
 			if not in_vent and not adminPanel and not Should_I_vote:
@@ -727,30 +750,36 @@ class online():
 			
 			screen.blit(low2, (-987+a, 1583+b))
 			screen.blit(low6, (-993+a, 1592+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-825+a, 1548+b))
 				screen.blit(low11, (-895+a, 1411+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-863+a, 1449+b))
 				screen.blit(low12, (-895+a, 1594+b))
+
 			screen.blit(lowred, (-975+a, 1341+b))
 			
 			#upper engine
 			screen.blit(low13, (-1099+a, 256+b))
 			screen.blit(low3, (-838+a, 407+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1089+a, 348+b))
 			else:
 				screen.blit(low4, (-1088+a, 349+b))
+
 			screen.blit(low2, (-993+a, 556+b))
 			screen.blit(low5, (-1081+a, 563+b))
 			screen.blit(low6, (-997+a, 569+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-846+a, 383+b))
 				screen.blit(low12, (-884+a, 539+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-918+a, 535+b))
 				screen.blit(low11, (-805+a, 433+b))
+
 			screen.blit(ele8, (-906+a, 291+b))
 			
 			#medbay
@@ -763,7 +792,8 @@ class online():
 			screen.blit(she1, (1106+a, 1436+b))
 			screen.blit(she2, (1103+a, 1429+b))
 			screen.blit(she3, (1093+a, 1362+b))
-			lig = [(1149, 1454), (1164, 1436), (1177, 1417), (1196, 1404), (1494, 1542), (1494, 1513), (1495, 1483)]
+			lig = [(1149, 1454), (1164, 1436), (1177, 1417), (1196, 1404), 
+					(1494, 1542), (1494, 1513), (1495, 1483)]
 			for i in lig[::-1]:
 				screen.blit(she9, (i[0]+a, i[1]+b))
 			screen.blit(she5, (1397+a, 1598+b))
@@ -783,9 +813,9 @@ class online():
 
 			#vent
 			near_vent = False
-			vent_pos = [(-360, 955), (-530, 1130), (-292, 1241), (-1334, 797), (-766, 349),
-						(-1233, 1166), (-765, 1689), (1290, 1770), (1870, 1094), (1269, 279),
-						(1869, 833), (833, 543), (743, 1380)]
+			vent_pos = [(-360, 955), (-530, 1130), (-292, 1241), (-1334, 797), 
+						(-766, 349), (-1233, 1166), (-765, 1689), (1290, 1770), 
+						(1870, 1094), (1269, 279), (1869, 833), (833, 543), (743, 1380)]
 			vent_rect = [vent_pic.get_rect() for i in vent_pos]
 			for i in range(len(vent_rect)):
 				vent_rect[i].x, vent_rect[i].y = vent_pos[i][0]+a, vent_pos[i][1]+b
@@ -808,11 +838,10 @@ class online():
 
 			for i in vent_pos:
 				screen.blit(vent_pic, (i[0]+a, i[1]+b))
-			#screen.blit(vent_pic, pygame.mouse.get_pos())
 
 			#collision
 			for i in range(len(collision)):
-				collision[i].rect.x, collision[i].rect.y = coll_loc[i][0]+a, coll_loc[i][1]+b
+				collision[i].rect.x,collision[i].rect.y=coll_loc[i][0]+a,coll_loc[i][1]+b
 			
 			coll1 = pygame.surface.Surface([150, 100])
 			h = coll1.get_rect()
@@ -832,18 +861,16 @@ class online():
 			s.rect.center = pygame.mouse.get_pos()
 			
 			security.rect.x, security.rect.y = 0, -200
-			"""task_group.draw(screen)
-												dead_grp.draw(screen)"""
 
 			for i in range(len(taskmgr)):
-				taskmgr[i].rect.x, taskmgr[i].rect.y = tskpos[i][0]+a, tskpos[i][1]+b
+				taskmgr[i].rect.x,taskmgr[i].rect.y=tskpos[i][0]+a,tskpos[i][1]+b
 
 			todo = ()
 			for i in range(len(taskmgr)):
 				if pygame.sprite.collide_rect(player, taskmgr[i]) == 1:
 					todo = 1, i
 					tasksToDo = i
-					##print(i)
+
 					if i == 29:
 						security.rect.x, security.rect.y = 789, 444
 						if pygame.mouse.get_pressed()[0]:
@@ -864,7 +891,6 @@ class online():
 				else:
 					tasks.image = tasksoff
 			if len(todo) > 0:
-				##print(tasksToDo)
 				if todo[1] in oo or todo[1] == 48:
 					tasks.image = taskson
 			else:
@@ -907,22 +933,26 @@ class online():
 			screen.blit(comm7, (1041+a, 1846+b))
 			screen.blit(sto3, (439+a, 1447+b))
 			screen.blit(low3, (-832+a, 1432+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1088+a, 1394+b))
 				screen.blit(low5, (-1078+a, 1607+b))
 			else:
 				screen.blit(low4, (-1087+a, 1389+b))
 				screen.blit(low5, (-1077+a, 1606+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-825+a, 1548+b))
 				screen.blit(low11, (-895+a, 1411+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-863+a, 1449+b))
 				screen.blit(low12, (-895+a, 1594+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1089+a, 348+b))
 			else:
 				screen.blit(low4, (-1088+a, 349+b))
+
 			screen.blit(rec1, (-1466+a, 824+b))
 			screen.blit(low5, (-1074+a, 563+b))
 
@@ -933,17 +963,16 @@ class online():
 				screen.blit(secC1, (-200, 0))
 				screen.blit(secC2, (809, 245))
 				screen.blit(secC3, (82, 230))
-				#1365 -720, 785 -99, 5 -825, -1025 -660
+
 				if 809 < pygame.mouse.get_pos()[0] < 809+60 and 245 < pygame.mouse.get_pos()[1] < 245+60 and pygame.mouse.get_pressed()[0]:
 					secCNum += 0.5
 					if secCNum > 5:
 						secCNum = 1
-					##print(int(secCNum))
 				if 82 < pygame.mouse.get_pos()[0] < 82+60 and 230 < pygame.mouse.get_pos()[1] < 230+60 and pygame.mouse.get_pressed()[0]:
 					secCNum -= 0.5
 					if secCNum < 1:
 						secCNum = 4.5
-					##print(int(secCNum))
+
 				if int(secCNum) == 1:
 					a, b = (1365, -720)
 				elif int(secCNum) == 2:
@@ -954,11 +983,11 @@ class online():
 					a, b = -1025, -660
 				close = pygame.image.load("models/buttons/close.png")
 				screen.blit(close, (100, 25))
+
 				if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 					secCam = 0
 					a, b = cc
 					cc = None
-				#screen.blit(secC2, pygame.mouse.get_pos())
 
 			#Multiplayer
 			Player_Pos = []
@@ -973,11 +1002,15 @@ class online():
 					sumTasks += 1
 
 			if AmIDEAD:
-				server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, False, [], voted, game_status))
+				server_info = connect.send((-MyDeadPos[0], -MyDeadPos[1], player.move, 
+							player.flip, My_color, AmIDEAD, (imposter, sabotages), 
+							killed_player_index, DeadPlayers, in_vent, sumTasks, False, 
+							[], voted, game_status))
 			else:
 				MyDeadPos = a, b
-				server_info = connect.send((-a, -b, player.move, player.flip, My_color, AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, in_vent, sumTasks, sab_fixed, Emergencys, voted, game_status))
-											#0	#1	#2				#3			#4		#5			#6					#7						#8			#9		#10			#11		#12			#13		#14
+				server_info = connect.send((-a, -b, player.move, player.flip, My_color, 
+							AmIDEAD, (imposter, sabotages), killed_player_index, DeadPlayers, 
+							in_vent, sumTasks, sab_fixed, Emergencys, voted, game_status))
 			Emergencys = []
 
 			try:
@@ -993,7 +1026,6 @@ class online():
 					server_info[i] = eval(server_info[i])
 					if server_info[i][6][0]:
 						imposterName = i
-						#print(server_info[i])
 
 				for i in server_info:
 					if server_info[i][14] != None:
@@ -1016,7 +1048,6 @@ class online():
 							pygame.display.update()
 							clock.tick(fps)
 						connect.send("disconnect")
-						print(uwon)
 						return 1
 
 					if len(server_info[i][12]) > 0:
@@ -1062,10 +1093,10 @@ class online():
 							screen.blit(player2, (int(server_info[i][0])+500+a, int(server_info[i][1])+275+b))
 
 					if server_info[i][7] != None:
-						#print(i, 'killed', server_info[i][7])
 						dead.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 						DEADPOS.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 						DeadPlayers.append(server_info[i][7])
+
 						if server_info[i][7] == ownpos and not AmIDEAD:
 							DeadPlayers.append(ownpos)
 							AmIDEAD = True
@@ -1095,10 +1126,7 @@ class online():
 					Player_Pos.append((int(server_info[i][0])+530+a, int(server_info[i][1])+305+b))
 
 			except Exception as e:
-				#print(e)
 				pass
-
-			##print(sumTasks)
 
 			#Player Pos
 			other_players_group = pygame.sprite.Group()
@@ -1145,6 +1173,7 @@ class online():
 					reportbut = 1
 					if pygame.mouse.get_pressed()[0] and report.rect.colliderect(mousebut.rect):
 						Emergencys.append("report")
+						
 			if reportbut == 1:
 				report.image = reporton
 			else:
@@ -1209,12 +1238,18 @@ class online():
 					ts_im = pygame.image.load("models/maps/3.png")
 					ts_imx = pygame.image.load("models/maps/3.png").get_size()[0]//2
 					ts_imy = pygame.image.load("models/maps/3.png").get_size()[1]//2
-					map_task_pos = {5:(411, 24), 10:(882, 231), 17:(683, 471), 42:(485, 348), 37:(565, 290), 25:(372, 290), 31:(191, 249),
-									24:(339, 315), 36:(169, 74), 34:(118, 356), 2:(806, 102), 15:(790, 377), 11:(907, 204), 6:(725, 201), 30:(267, 217),
-									38:(609, 290), 4:(783, 82), 1:(740, 55), 12:(928, 201), 19:(628, 470), 23:(314, 316),
-									21:(466, 490), 35:(108, 178), 32:(124, 456), 49:(98, 175), 33:(104, 457), 28:(399, 239), 27:(366, 263),
-									40:(666, 345), 8:(659, 215), 26:(408, 316), 0:(754, 123), 14:(975, 255), 13:(954, 214), 16:(720, 490), 45:(20, 194), 43:(28, 282),
-									3:(645, 59), 9:(644, 235), 20:(533, 544)}
+
+					map_task_pos = {5:(411, 24), 10:(882, 231), 17:(683, 471), 42:(485, 348), 
+									37:(565, 290), 25:(372, 290), 31:(191, 249), 24:(339, 315), 
+									36:(169, 74), 34:(118, 356), 2:(806, 102), 15:(790, 377), 
+									11:(907, 204), 6:(725, 201), 30:(267, 217), 38:(609, 290), 
+									4:(783, 82), 1:(740, 55), 12:(928, 201), 19:(628, 470), 
+									23:(314, 316), 21:(466, 490), 35:(108, 178), 32:(124, 456), 
+									49:(98, 175), 33:(104, 457), 28:(399, 239), 27:(366, 263),
+									40:(666, 345), 8:(659, 215), 26:(408, 316), 0:(754, 123), 
+									14:(975, 255), 13:(954, 214), 16:(720, 490), 45:(20, 194), 
+									43:(28, 282), 3:(645, 59), 9:(644, 235), 20:(533, 544)}
+									
 					sab_pos = {22:(309, 349), 7:(655, 218)}
 					for i in sabotages:
 						if i[0] in sab_pos:
@@ -1222,6 +1257,7 @@ class online():
 					for i in oo:
 						if i in map_task_pos:
 							screen.blit(ts_im, (map_task_pos[i][0]-ts_imx, map_task_pos[i][1]-ts_imy))
+
 					close = pygame.image.load("models/buttons/close.png")
 					screen.blit(close, (100, 25))
 					if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
@@ -1231,7 +1267,8 @@ class online():
 
 					sab_pos = {22:(309, 349), 7:(655, 218)}
 
-					door_sab_pos = [(490, 101), (305, 191), (115, 101), (115, 377), (206, 238), (292, 414), (458, 422)]
+					door_sab_pos = [(490, 101), (305, 191), (115, 101), (115, 377), (206, 238), 
+									(292, 414), (458, 422)]
 					sabs = {22:pygame.image.load("models/maps/7.png"), 7:pygame.image.load("models/maps/6.png")}
 					close_doors = pygame.image.load("models/maps/5.png")
 					door1_pos = [(-283, 553), (-928, 1256), (-314, 1628), (425, 1230), (426, 941)]
@@ -1260,7 +1297,6 @@ class online():
 				screen.blit(close, (100, 25))
 				if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 					adminPanel = False
-				##print('adminPanel')
 
 			#buttons
 			button_group.draw(screen)
@@ -1273,8 +1309,6 @@ class online():
 				totVotes = 0
 				votes = []
 
-				##print(names)
-
 				for i in range(len(server_info)):
 					if i <= 4:
 
@@ -1282,7 +1316,7 @@ class online():
 						try:
 							screen.blit(colorchanger(vs4, server_info[names[i]][4]), (128, 106+74*i))
 						except:
-							print(server_info[names[i]][4])
+							pass
 
 						Text = font.render(names[i], True, (0,0,0))
 						Textrect = Text.get_rect()
@@ -1299,7 +1333,6 @@ class online():
 						if 121 < pygame.mouse.get_pos()[0] < 121 + 346 and 100+74*i < pygame.mouse.get_pos()[1] < 160+74*i:
 							if pygame.mouse.get_pressed()[0]:
 								pressed_on = i
-								#print(names[i])
 
 						if voted == None and not AmIDEAD:
 							screen.blit(vs3, (354, 105+74*(pressed_on)))
@@ -1308,7 +1341,7 @@ class online():
 								if 355 < pygame.mouse.get_pos()[0] < 402:
 									if pygame.mouse.get_pressed()[0]:
 										voted = names[pressed_on]
-										#print(voted)
+
 								if 410 < pygame.mouse.get_pos()[0] < 456:
 									if pygame.mouse.get_pressed()[0]:
 										pressed_on = -10
@@ -1332,7 +1365,6 @@ class online():
 						if 491 < pygame.mouse.get_pos()[0] < 491 + 346 and 100+74*(i-5) < pygame.mouse.get_pos()[1] < 160+74*(i-5):
 							if pygame.mouse.get_pressed()[0]:
 								pressed_on = i
-								#print(names[i])
 
 						if voted == None and not AmIDEAD:
 							screen.blit(vs3, (728, 105+74*(pressed_on-5)))
@@ -1341,15 +1373,14 @@ class online():
 								if 355 < pygame.mouse.get_pos()[0] < 402:
 									if pygame.mouse.get_pressed()[0]:
 										voted = names[pressed_on]
-										#print(voted)
 								if 410 < pygame.mouse.get_pos()[0] < 456:
 									if pygame.mouse.get_pressed()[0]:
 										pressed_on = -10
 
 				if AmIDEAD:
 					screen.blit(pygame.image.load("models/voting/7.png"), (110, 22))
+
 				if totVotes == len(server_info)-len(DeadPlayers):
-					#print(connect.name, 'Voted for', server_info[str("b'"+connect.name+"'")][13])
 					Should_I_vote = False
 					kick_screen = True
 					amount_name = 0
@@ -1362,12 +1393,10 @@ class online():
 
 					prev_max = (0, '')
 					max_votes = (0,'')
-					#print(got_votes)
 					for i in got_votes:
 						if max_votes[0] <= got_votes[i]:
 							prev_max = max_votes
 							max_votes = (got_votes[i], i)
-					#print(max_votes, prev_max)
 					if max_votes[0] == prev_max[0]:
 						Tie = True
 					else:
@@ -1410,11 +1439,7 @@ class online():
 				for i in range(len(server_info)):
 					pygame.draw.rect(screen, (255, 255, 255), (16, 19, ((i+1)*6)*10, 30), 5)
 
-			#wall_group.draw(screen)
 			players.update(secCam, My_color, in_vent, AmIDEAD)
 			s.update()
 			pygame.display.update()
 			clock.tick(fps)
-
-if __name__ == '__main__':
-	online().run()

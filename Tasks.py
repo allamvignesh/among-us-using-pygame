@@ -12,9 +12,7 @@ close = pygame.image.load("models/buttons/close.png")
 
 class Tasks():
 	def __init__(self):
-		self.tasks = [0 for i in range(20)]
-		self.tasks = [1 for i in range(22)]
-		#print(self.tasks)
+		pass
 
 	def blitRotate(self, surf, image, pos, originPos, angle):
 
@@ -512,7 +510,6 @@ class Tasks():
 			if 612 < pygame.mouse.get_pos()[0] < 716 and 128 < pygame.mouse.get_pos()[1] < 152 and calDoing[0] == 0:
 				if pygame.mouse.get_pressed()[0]:
 					screen.blit(cal2, (609, 130))
-					##print(angles[0]/360)
 					if 0.1 < angles[0]/360 < 0.9:
 						angles = [random.randint(0, 360) for i in range(3)]
 						calDoing = [0 for i in range(3)]
@@ -1081,12 +1078,10 @@ class Tasks():
 							butPress = i
 			if butPress != None:
 				if butPress == sr[0]:
-					#print(butPress)
 					del sr[0]
 					if len(sr) == 0:
 						srDoing += 1
 						sr = [random.randint(0,8) for i in range(srDoing)]
-						#print(sr)
 						l = 0
 					if srDoing == 6:
 						self.tasks[17] = 1
@@ -1151,7 +1146,6 @@ class Tasks():
 			num += 0.1
 			if num >= 9:
 				num = 1
-				#print(n)
 				n += 1
 			if n > 2:
 				self.tasks[19] = 1
@@ -1240,7 +1234,6 @@ class Tasks():
 					self.tasks[21] = 0
 					return 0
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					print(pygame.mouse.get_pos())
 					if len(num) < 5:
 						if 318 < pygame.mouse.get_pos()[0] < 392 and 155 < pygame.mouse.get_pos()[1] < 229:
 							num += '1'
@@ -1272,69 +1265,3 @@ class Tasks():
 
 			pygame.display.update()
 			clock.tick(fps)
-
-
-if __name__ == '__main__':
-	Task = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-	#Task = [0 for i in range(22)]
-	Task[21] = 0
-	ta = Tasks()
-
-	while True:
-
-		screen.fill((255, 0, 0))
-
-		#print(ta.tasks)
-
-		if Task[0] == 0:
-			Task[0] = ta.swipeCard()
-		elif Task[1] == 0:
-			Task[1] = ta.fixWiring()
-		elif Task[2] == 0:
-			Task[2] = ta.emptyGarbage()
-		elif Task[3] == 0:
-			Task[3] = ta.upload()
-		elif Task[4] == 0:
-			Task[4] = ta.Download(1)
-		elif Task[5] == 0:
-			Task[5] = ta.clearLeaves()
-		elif Task[6] == 0:
-			Task[6] = ta.alignEngine()
-		elif Task[7] == 0:
-			Task[7] = ta.calibrate()
-		elif Task[8] == 0:
-			Task[8] = ta.chartCourse()
-		elif Task[9] == 0:
-			Task[9] = ta.weapons()
-		elif Task[10] == 0:
-			Task[10] = ta.divertPower(2)
-		elif Task[11] == 0:
-			Task[11] = ta.fualEngine()
-		elif Task[12] == 0:
-			Task[12] = ta.fillCan()
-		elif Task[13] == 0:
-			Task[13] = ta.inspectSample()
-		elif Task[14] == 0:
-			Task[14] = ta.primeShield()
-		elif Task[15] == 0:
-			Task[15] = ta.stabSteering()
-		elif Task[16] == 0:
-			Task[16] = ta.unlockManifolds()
-		elif Task[17] == 0:
-			Task[17] = ta.starReactor()
-		elif Task[18] == 0:
-			Task[18] = ta.acceptPower()
-		elif Task[19] == 0:
-			Task[19] = ta.medbayScan()
-		elif Task[20] == 0:
-			Task[20] = ta.electrical()
-		elif Task[21] == 0:
-			Task[21] = ta.oxygen()
-
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.quit()
-				exit()
-
-		pygame.display.update()
-		clock.tick(fps)

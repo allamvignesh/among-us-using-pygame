@@ -179,11 +179,13 @@ class Free_play():
 		class Sprite(pygame.sprite.Sprite):
 			def __init__(self, sizex = 10, sizey = 10, surface = 'default'):
 				pygame.sprite.Sprite.__init__(self)
+
 				if surface == 'default':
 					self.image = pygame.Surface((sizex, sizey))
 					self.image.fill((255, 0, 0))
 				else:
 					self.image = surface
+
 				self.rect = self.image.get_rect()
 
 		q = open('collision_points.dat', 'rb')
@@ -244,24 +246,35 @@ class Free_play():
 
 		if imposter:
 			tasks.rect.x, tasks.rect.y = (0, -200)
-			#tasksoff.rect.x, tasksoff.rect.y = (0, -200)
 		else:
 			sabotage.rect.x, sabotage.rect.y = 0, -200
 			kill.rect.x, kill.rect.y = 0, -200
 			vent.rect.x, vent.rect.y = 0, -200
 
-		tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), (920, 256, 10, 10), (841, 180, 10, 10), (117, 121, 10, 10),
-					(1260, 787, 10, 10), (1107, 817, 10, 10), (1035, 827, 10, 10), (964, 860, 10, 10), (1761, 919, 10, 10), (1878, 791, 10, 10), (1967, 776, 10, 10), (2028, 811, 10, 10), (2073, 1021, 10, 10),
-					(1409, 1422, 10, 10), (1176, 1769, 10, 10), (1056, 1760, 10, 10), (922, 1972, 10, 10), (887, 1771, 10, 10), (612, 1981, 10, 10), (254, 1724, 10, 10), (-256, 1432, 10, 10), (-266, 1201, 10, 10), (-206, 1201, 10, 10), (-111, 1201, 10, 10), (54, 1201, 10, 10),
-					(-67, 997, 10, 10), (-13, 936, 10, 10), (-518, 815, 10, 10), (-475, 833, 10, 10), (-719, 956, 10, 10), (-990, 1626, 10, 10), (-1007, 1617, 10, 10), (-978, 1330, 10, 10), (-1001, 588, 10, 10), (-917, 284, 10, 10),
-					(639, 1091, 10, 10), (738, 1072, 10, 10), (808, 1265, 10, 10), (1012, 1265, 10, 10), (1078, 1088, 10, 10), (362, 1294, 10, 10),
-					(-1316, 1020, 10, 10), (-1156, 799, 10, 10), (-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), (340, 402, 220, 150), (-1071, 610, 10, 10)]
+		tskpos = [(1290, 405, 10, 10), (1290, 233, 10, 10), (1478, 397, 10, 10), 
+					(920, 256, 10, 10), (841, 180, 10, 10), (117, 121, 10, 10),
+					(1260, 787, 10, 10), (1107, 817, 10, 10), (1035, 827, 10, 10), 
+					(964, 860, 10, 10), (1761, 919, 10, 10), (1878, 791, 10, 10), 
+					(1967, 776, 10, 10), (2028, 811, 10, 10), (2073, 1021, 10, 10),
+					(1409, 1422, 10, 10), (1176, 1769, 10, 10), (1056, 1760, 10, 10), 
+					(922, 1972, 10, 10), (887, 1771, 10, 10), (612, 1981, 10, 10), 
+					(254, 1724, 10, 10), (-256, 1432, 10, 10), (-266, 1201, 10, 10), 
+					(-206, 1201, 10, 10), (-111, 1201, 10, 10), (54, 1201, 10, 10),
+					(-67, 997, 10, 10), (-13, 936, 10, 10), (-518, 815, 10, 10), 
+					(-475, 833, 10, 10), (-719, 956, 10, 10), (-990, 1626, 10, 10), 
+					(-1007, 1617, 10, 10), (-978, 1330, 10, 10), (-1001, 588, 10, 10), 
+					(-917, 284, 10, 10), (639, 1091, 10, 10), (738, 1072, 10, 10), 
+					(808, 1265, 10, 10), (1012, 1265, 10, 10), (1078, 1088, 10, 10), 
+					(362, 1294, 10, 10), (-1316, 1020, 10, 10), (-1156, 799, 10, 10), 
+					(-1366, 710, 10, 10), (-1273, 648, 10, 10), (-1278, 1344, 10, 10), 
+					(340, 402, 220, 150), (-1071, 610, 10, 10)]
 
 
-		ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 14:15, 15:18, 16:14,
-				17:18, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 
-				31:1, 30:18, 35:11, 36:18, 27:19, 28:13, 37:1, 38:4, 40:0, 49:6}
-		#print(len(ToDo))
+		ToDo = {5:1, 4:3, 3:2, 0:9, 1:3, 2:18, 6:18, 8:5, 9:2, 10:1, 11:18, 12:3, 13:8, 
+				14:15, 15:18, 16:14, 17:18, 19:3, 21:12, 20:2, 42:1, 23:1, 24:10, 25:1, 
+				26:7, 32:11, 33:6, 34:18, 43:17, 45:16, 31:1, 30:18, 35:11, 36:18, 27:19, 
+				28:13, 37:1, 38:4, 40:0, 49:6}
+
 		DoTo = []
 
 		taskmgr = [Sprite(k+40, l+40) for i,j,k,l in tskpos]
@@ -296,22 +309,13 @@ class Free_play():
 			for event in pygame.event.get():
 				if event.type == pygame.QUIT:
 					return 1
-					##print(f)
-					##print('\n\n', tskpos)
 					exit()
+				
 				if event.type == pygame.MOUSEBUTTONDOWN:
-					##print(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
-					##print(pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b)
-
-					#print(a, b)
-
-					f.append((pygame.mouse.get_pos()[0]-a, pygame.mouse.get_pos()[1]-b, 10, 10))
-
 					for i in range(len(but)):
 						smashhit = pygame.sprite.collide_rect(mousebut, but[i])
 						if smashhit and pygame.mouse.get_pressed()[0]:
 							if tasksToDo in ToDo and not imposter:
-								print(tasksToDo)
 								pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Inprogress.wav'))
 								if ToDo[tasksToDo] == 0:
 									Tasks.swipeCard()
@@ -353,9 +357,11 @@ class Free_play():
 									Tasks.acceptPower()
 								elif ToDo[tasksToDo] == 19:
 									Tasks.medbayScan()
+
 								pygame.mixer.Channel(4).play(pygame.mixer.Sound(f'bgs/Among Us General Sounds/task_Complete.wav'))	
 
 			keys = pygame.key.get_pressed()
+
 			if keys[K_w]:
 				b += 3
 			if keys[K_a]:
@@ -383,10 +389,12 @@ class Free_play():
 			screen.blit(o24, (941+a, 830+b))
 			screen.blit(o25, (1067+a, 722+b))
 			screen.blit(o23, (1090+a, 806+b))
+
 			if c%2 == 0:
 				screen.blit(o26, (891+a, 777+b))
 			else:
 				screen.blit(o27, (891+a, 777+b))
+
 			screen.blit(oredirect, (1229+a, 771+b))
 
 			#navigation
@@ -435,10 +443,12 @@ class Free_play():
 			screen.blit(comm1, (663+a, 1739+b))
 			screen.blit(comm2, (662+a, 1696+b))
 			screen.blit(comm3, (676+a, 1729+b))
+
 			if c%2 == 0:
 				screen.blit(comm8, (696+a, 1756+b))
 			else:
 				screen.blit(comm9, (696+a, 1756+b))
+
 			screen.blit(comm10, (1046+a, 1752+b))
 			screen.blit(comm11, (856+a, 1736+b))
 			
@@ -465,39 +475,47 @@ class Free_play():
 			#lowerengine
 			screen.blit(low1, (-1097+a, 1269+b))
 			screen.blit(low3, (-832+a, 1432+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1088+a, 1394+b))
 				screen.blit(low5, (-1078+a, 1607+b))
 			else:
 				screen.blit(low4, (-1087+a, 1389+b))
 				screen.blit(low5, (-1077+a, 1606+b))
+
 			
 			screen.blit(low2, (-987+a, 1583+b))
 			screen.blit(low6, (-993+a, 1592+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-825+a, 1548+b))
 				screen.blit(low11, (-895+a, 1411+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-863+a, 1449+b))
 				screen.blit(low12, (-895+a, 1594+b))
+
 			screen.blit(lowred, (-975+a, 1341+b))
 			
 			#upper engine
 			screen.blit(low13, (-1099+a, 256+b))
 			screen.blit(low3, (-838+a, 407+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1089+a, 348+b))
 			else:
 				screen.blit(low4, (-1088+a, 349+b))
+
 			screen.blit(low2, (-993+a, 556+b))
 			screen.blit(low5, (-1081+a, 563+b))
 			screen.blit(low6, (-997+a, 569+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-846+a, 383+b))
 				screen.blit(low12, (-884+a, 539+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-918+a, 535+b))
 				screen.blit(low11, (-805+a, 433+b))
+
 			screen.blit(ele8, (-906+a, 291+b))
 			
 			#medbay
@@ -510,9 +528,12 @@ class Free_play():
 			screen.blit(she1, (1106+a, 1436+b))
 			screen.blit(she2, (1103+a, 1429+b))
 			screen.blit(she3, (1093+a, 1362+b))
-			lig = [(1149, 1454), (1164, 1436), (1177, 1417), (1196, 1404), (1494, 1542), (1494, 1513), (1495, 1483)]
+			lig = [(1149, 1454), (1164, 1436), (1177, 1417), (1196, 1404), (1494, 1542), 
+					(1494, 1513), (1495, 1483)]
+			
 			for i in lig[::-1]:
 				screen.blit(she9, (i[0]+a, i[1]+b))
+
 			screen.blit(she5, (1397+a, 1598+b))
 			screen.blit(she6, (1131+a, 1436+b))
 			screen.blit(she7, (1153+a, 1713+b))
@@ -573,7 +594,6 @@ class Free_play():
 				else:
 					tasks.image = tasksoff
 			if todo == 1:
-				##print(tasksToDo)
 				tasks.image = taskson
 			else:
 				tasksToDo = None
@@ -592,6 +612,7 @@ class Free_play():
 			for i in dead:
 				if pygame.sprite.collide_rect(player, i) == 1:
 					reportbut = 1
+
 			if reportbut == 1:
 				report.image = reporton
 			else:
@@ -633,22 +654,26 @@ class Free_play():
 			screen.blit(comm7, (1041+a, 1846+b))
 			screen.blit(sto3, (439+a, 1447+b))
 			screen.blit(low3, (-832+a, 1432+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1088+a, 1394+b))
 				screen.blit(low5, (-1078+a, 1607+b))
 			else:
 				screen.blit(low4, (-1087+a, 1389+b))
 				screen.blit(low5, (-1077+a, 1606+b))
+
 			if c%7 == 0:
 				screen.blit(low9, (-825+a, 1548+b))
 				screen.blit(low11, (-895+a, 1411+b))
 			elif c%8 == 0:
 				screen.blit(low10, (-863+a, 1449+b))
 				screen.blit(low12, (-895+a, 1594+b))
+
 			if c%2 == 0:
 				screen.blit(low4, (-1089+a, 348+b))
 			else:
 				screen.blit(low4, (-1088+a, 349+b))
+
 			screen.blit(rec1, (-1466+a, 824+b))
 			screen.blit(low5, (-1074+a, 563+b))
 
@@ -657,30 +682,21 @@ class Free_play():
 			#buttons
 			button_group.draw(screen)
 
-			view = pygame.Surface.convert_alpha(pygame.Surface([1000, 550]))
-			view.fill((0, 0, 0, 150))
-
-			for i in range(255, 0, -1):
-				pygame.draw.circle(view, (0,0,0,i), player.rect.center, i*3)
-
-			#screen.blit(kill, pygame.mouse.get_pos())
-
 			if secCam == 1:
-
 				screen.blit(secC1, (-200, 0))
 				screen.blit(secC2, (809, 245))
 				screen.blit(secC3, (82, 230))
-				#1365 -720, 785 -99, 5 -825, -1025 -660
+
 				if 809 < pygame.mouse.get_pos()[0] < 809+60 and 245 < pygame.mouse.get_pos()[1] < 245+60 and pygame.mouse.get_pressed()[0]:
 					secCNum += 0.5
 					if secCNum > 5:
 						secCNum = 1
-					#print(int(secCNum))
+
 				if 82 < pygame.mouse.get_pos()[0] < 82+60 and 230 < pygame.mouse.get_pos()[1] < 230+60 and pygame.mouse.get_pressed()[0]:
 					secCNum -= 0.5
 					if secCNum < 1:
 						secCNum = 4.5
-					#print(int(secCNum))
+
 				if int(secCNum) == 1:
 					a, b = (1365, -720)
 				elif int(secCNum) == 2:
@@ -689,24 +705,25 @@ class Free_play():
 					a, b = 5, -825
 				else:
 					a, b = -1025, -660
+
 				close = pygame.image.load("models/buttons/close.png")
 				screen.blit(close, (100, 25))
+
 				if 117 < pygame.mouse.get_pos()[0] < 155 and 41 < pygame.mouse.get_pos()[1] < 78 and pygame.mouse.get_pressed()[0]:
 					secCam = 0
 					a, b = cc
 					cc = None
-				#screen.blit(secC2, pygame.mouse.get_pos())
 
 			#wall_group.draw(screen)
 
 			close = pygame.image.load("models/buttons/close.png")
 			screen.blit(close, (0, 0))
+
 			if 0 < pygame.mouse.get_pos()[0] < 50 and 0 < pygame.mouse.get_pos()[1] < 50 and pygame.mouse.get_pressed()[0]:
 				return 1
 
 			players.update(secCam)
 			pygame.display.update()
 			clock.tick(fps)
-
 if __name__ == '__main__':
-	Free_play().run()
+        Free_play().run()
