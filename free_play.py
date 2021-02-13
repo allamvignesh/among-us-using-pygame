@@ -11,7 +11,6 @@ clock = pygame.time.Clock()
 fps = 60
 size =[1000, 550]
 screen = pygame.display.set_mode(size)
-screen.set_colorkey('#000000')
 
 class Free_play():
 	def __init__(self):
