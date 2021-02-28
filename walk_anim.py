@@ -29,6 +29,7 @@ class Player(pygame.sprite.Sprite):
 
 		if keys[K_w] or keys[K_a] or keys[K_s] or keys[K_d]:
 			if pygame.mixer.Channel(3).get_busy() == 0:
+				pygame.mixer.Channel(3).set_volume(0.2)
 				pygame.mixer.Channel(3).play(pygame.mixer.Sound(f'bgs/Player/Footsteps/Metal/FootstepMetal0{random.randint(1,8)}.wav'))
 		if keys[K_d]:
 			self.flip = 1

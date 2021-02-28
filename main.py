@@ -31,7 +31,11 @@ class Screens():
 				if pygame.mixer.Channel(0).get_busy() == 0:
 					pygame.mixer.Channel(0).play(Theme)
 
+				Theme.set_volume(0.5)
+
 				self.nextScreen = self.mainScreen()
+
+				Theme.set_volume(0.1)
 
 				if self.nextScreen == 1:
 					try:
